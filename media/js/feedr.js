@@ -2,7 +2,8 @@ var width,height,c;
 
 var framedelay=66;
 var fontsize=30;
-var linelength=30;
+var linelength=20;
+var fontface="Georgia";
 
 var scene=[];
 var transitions=[];
@@ -27,7 +28,7 @@ function lerp(t,a,b) {
 
 function placement(x) {
 	var t=x*0.006;
-	return (Math.sin(t)+Math.sin(2.232*t)+Math.sin(9.876*t)+Math.sin(18.888*t))*50.0+100.0;
+	return (Math.sin(t)*2.0+Math.sin(2.232*t)+Math.sin(9.876*t)+Math.sin(18.888*t))*50.0;
 }
 
 function calcangle() {
@@ -130,7 +131,9 @@ function Transition(property,start,end,duration) {
 /** @constructor */
 function Tweet(data) {
 	this.position=new Property([100,10]);
+	this.charpos=new Property([0]);
 	this.margin=16;
+	this.padding=8;
 	this.message=data;
 	
 	var l=this.message.split(" ");
@@ -145,12 +148,17 @@ function Tweet(data) {
 	}
 	this.message=s;
 
-	c.font=fontsize+"px Gesta-1";
+	c.font=fontsize+"px "+fontface;
 	var exts=textmetrics(fontsize,this.message);
-	this.width=exts[0]+2*this.margin;
-	this.height=exts[1]+2*this.margin;
+	this.width=64+this.padding*2+exts[0]+2*this.margin;
+	this.height=Math.max(exts[1],64+this.padding*2)+2*this.margin;
 	findnewpos(this);
 	tweets.push(this);
+
+	this.avatar=new Image();
+	this.avatar.src="https://s3.amazonaws.com/twitter_production/profile_images/57432055/My_Fabulous_MicroMoog-1_bigger.jpg";
+
+	new Transition(this.charpos,[0],[this.message.length],10);
 	
 	this.draw=function() {
 		c.shadowColor="rgba(0,0,0,0.4)";
@@ -160,11 +168,19 @@ function Tweet(data) {
 //		c.fillStyle="#f0f";
 //		c.fillRect(this.position.value[0],this.position.value[1],20,20);
 
-		c.font=fontsize+"px Gesta-1";
+		c.save();
+		c.translate(this.position.value[0],this.position.value[1]);
+		
 		c.fillStyle="#f0f";
-		c.fillRect(this.position.value[0]+this.margin,this.position.value[1]+this.margin,this.width-this.margin*2,this.height-this.margin*2);
+		c.fillRect(this.margin,this.margin,this.width-this.margin*2,this.height-this.margin*2);
+		
+		if (this.avatar.complete==true) 
+			c.drawImage(this.avatar,this.margin+this.padding,this.margin+this.padding,64,64);
+
+		c.font=fontsize+"px "+fontface;
 		c.fillStyle="#000";
-		filltext(fontsize,this.message,this.position.value[0]+this.margin,this.position.value[1]+this.margin);
+		filltext(fontsize,this.message.substr(0,this.charpos.value[0]),this.margin+this.padding*2+64,this.margin);
+		c.restore();
 	};
 }
 
@@ -237,9 +253,9 @@ $(function(){
 	$(window).resize(resizecanvas);
 
 	$("#thecanvas").click(function(){
-		var t=new Tweet("RT justin bieber was a freaking lolcat abuser");
+		var t=new Tweet("RT justin bieber was a freaking lolcat abuser, he totally biebered them ololololol bla bla blah! 12345");
 		scene.push(t);
-		new Transition(cam.position,cam.position.value,[t.position.value[0],t.position.value[1],calcangle()],30.0);
+		new Transition(cam.position,cam.position.value,[t.position.value[0]+t.width*0.5,t.position.value[1]+t.height*0.5,calcangle()],20.0);
 	});
 	scene.push(new GrowArrow([-100.0,10.0],[100.0,100.0],[400.0,400.0],[500.0,300.0]));
 //	new Transition(tweet.position,[0,0],[50,70],10.0);
