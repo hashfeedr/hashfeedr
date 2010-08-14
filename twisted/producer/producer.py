@@ -1,7 +1,7 @@
 from twisted.internet import reactor
-import hashdispenser
 import os, sys
 import redis as omg
+from producer import hashdispenser
 
 # connect to redis (synchronous for now)
 redis = omg.Redis()
