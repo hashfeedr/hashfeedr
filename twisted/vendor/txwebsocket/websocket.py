@@ -83,7 +83,7 @@ class WebSocketRequest(Request):
         if not handlerFactory:
             return finish()
         transport = WebSocketTransport(self)
-        handler = handlerFactory(transport, self.site)
+        self.handler = handler = handlerFactory(transport, self.site)
         transport._attachHandler(handler)
 
         # key1 and key2 exist and are a string of characters
@@ -134,9 +134,8 @@ class WebSocketRequest(Request):
             else:
                 protocolHeader = None
 
-            handler = handlerFactory(transport, self.site)
-            check = originHeaders[0], hostHeaders[0], protocolHeader, handler
-
+            # don't recreate the handler here!
+            check = originHeaders[0], hostHeaders[0], protocolHeader, self.handler
             originHeader, hostHeader, protocolHeader, handler = check
             self.startedWriting = True
             handshake = [
