@@ -1,4 +1,3 @@
-Hashfeedr
 Django==1.2.1
 Twisted==10.1.0
 -e git+http://github.com/fiorix/twisted-twitter-stream.git@d129de19b35aca55ac37778fcc9a2441800caf3a#egg=TwistedTwitterStream-0.0.1-py2.7-dev
