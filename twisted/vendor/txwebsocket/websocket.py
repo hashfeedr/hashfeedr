@@ -79,7 +79,7 @@ class WebSocketRequest(Request):
         hostHeaders = self.requestHeaders.getRawHeaders("Host", [])
         if len(hostHeaders) != 1:
             return finish()
-        handlerFactory = self.site.handlers.get(self.uri)
+        handlerFactory = self.site.handlers.get('/' + self.postpath[0])
         if not handlerFactory:
             return finish()
         transport = WebSocketTransport(self)
@@ -192,7 +192,7 @@ class WebSocketRequest(Request):
         if len(hostHeaders) != 1:
             return finish()
 
-        handlerFactory = self.site.handlers.get(self.uri)
+        handlerFactory = self.site.handlers.get('/' + self.postpath[0])
         if not handlerFactory:
             return finish()
         transport = WebSocketTransport(self)

@@ -15,9 +15,10 @@ class HashSubscriber(RedisSubscriber):
 class HashfeedrWebSocket(websocket.WebSocketHandler):
     def __init__(self,transport,request):
         websocket.WebSocketHandler.__init__(self,transport,request)
-        log.msg("%s: New connection, %s" % (repr(self),request))
+        self.term = request.postpath[1]
         self.connected = True
         self.createSubscriber()
+        log.msg("%s: New connection (%s), term: %s" % (repr(self),request,self.term))
 
     @defer.inlineCallbacks
     def createSubscriber(self):
@@ -55,5 +56,5 @@ class HashfeedrWebSocket(websocket.WebSocketHandler):
 
 application = service.Application("hashfeedr")
 site = websocket.WebSocketSite(util.Redirect("http://twitter.com/justinbieber"))
-site.addHandler("/websession", HashfeedrWebSocket)
+site.addHandler("/ws", HashfeedrWebSocket)
 reactor.listenTCP(8338, site)

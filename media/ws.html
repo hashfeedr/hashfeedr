@@ -10,7 +10,7 @@
     WEB_SOCKET_DEBUG = true;
 
     $(document).ready(function() {
-      var ws = new WebSocket("ws://hashfeedr.com:8338/websession");
+      var ws = new WebSocket("ws://hashfeedr.com:8338/ws/djangodash");
       ws.onmessage = function(evt) {
         $('#tweet').text(evt.data);
       }
