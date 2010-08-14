@@ -19,6 +19,7 @@ urlpatterns = patterns('',
 
 	(r'^$', 'hashfeedr.views.landing_page'),
 	(r'^feed/(\w|\d|#)+$', 'hashfeedr.views.feeder'),
+	(r'^gofeed$','hashfeedr.views.gofeed'),
 )
 
 if settings.DEBUG:

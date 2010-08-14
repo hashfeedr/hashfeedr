@@ -10,9 +10,8 @@
 		<h2>Getting started</h2>
 		<p>
 		To get started, simply enter a hashtag in the big box below and hit the big button
-		<form action="." method="POST">
-		{% csrf_token %}
-		{{ form.as_p}}
+		<form action="/gofeed" method="GET" id="queryform">
+		<input type="text" name="query" id="query" value="#djangodash">
 		<input type="submit" id="gobutton" value="Big Button">
 		</form>
 		</p>
@@ -20,6 +19,10 @@
 		<ul><li><a href="/feed/justin">Justin</a></li><li><a href="/feed/biebergasm">Bieber</a></li></ul>
 		<h2>About HashFeedr</h2>
 		<p>There is no time for this.</p>
+		
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+		<script>!window.jQuery && document.write('<script src="{{ MEDIA_URL }}/js/jquery-1.4.2.min.js"><\/script>')</script>
+		<script src="{{ MEDIA_URL }}/js/landing.js"></script>
 		
 	</body>
 </html>
