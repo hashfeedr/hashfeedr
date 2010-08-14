@@ -1,7 +1,10 @@
-canvas#main {
+canvas {
 	width: 100%;
 	height: 100%;
+	position: abolsute;
+	z-index: 1;
 }
 body {
 	margin: 0px;
+	padding: 0px;
 }
