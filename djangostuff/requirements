@@ -1,0 +1,4 @@
+Hashfeedr
+Django==1.2.1
+Twisted==10.1.0
+
