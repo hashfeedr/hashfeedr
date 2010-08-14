@@ -1,6 +1,8 @@
 var width,height,c;
 
 var framedelay=66;
+var fontsize=30;
+var linelength=30;
 
 var scene=[];
 var transitions=[];
@@ -130,9 +132,21 @@ function Tweet(data) {
 	this.position=new Property([100,10]);
 	this.margin=16;
 	this.message=data;
-		
-	c.font="50px Gesta-1";
-	var exts=textmetrics(50,this.message);
+	
+	var l=this.message.split(" ");
+	var s="",n=0;
+	for (var i=0;i<l.length;++i) {
+		s+=l[i]+" ";
+		n+=l[i].length;
+		if (n>linelength) {
+			s+="\n";
+			n=0;
+		}
+	}
+	this.message=s;
+
+	c.font=fontsize+"px Gesta-1";
+	var exts=textmetrics(fontsize,this.message);
 	this.width=exts[0]+2*this.margin;
 	this.height=exts[1]+2*this.margin;
 	findnewpos(this);
@@ -146,11 +160,11 @@ function Tweet(data) {
 //		c.fillStyle="#f0f";
 //		c.fillRect(this.position.value[0],this.position.value[1],20,20);
 
-		c.font="50px Gesta-1";
+		c.font=fontsize+"px Gesta-1";
 		c.fillStyle="#f0f";
 		c.fillRect(this.position.value[0]+this.margin,this.position.value[1]+this.margin,this.width-this.margin*2,this.height-this.margin*2);
 		c.fillStyle="#000";
-		filltext(50,this.message,this.position.value[0]+this.margin,this.position.value[1]+this.margin);
+		filltext(fontsize,this.message,this.position.value[0]+this.margin,this.position.value[1]+this.margin);
 	};
 }
 
@@ -219,28 +233,14 @@ function draw() {
 $(function(){
 	c=$("#thecanvas").get(0).getContext("2d");
 
-
 	resizecanvas();
 	$(window).resize(resizecanvas);
 
-
 	$("#thecanvas").click(function(){
-		var t=new Tweet("justin bieber");
+		var t=new Tweet("RT justin bieber was a freaking lolcat abuser");
 		scene.push(t);
 		new Transition(cam.position,cam.position.value,[t.position.value[0],t.position.value[1],calcangle()],30.0);
 	});
-/*	scene.push(new Tweet("bieber justin"));
-	scene.push(new Tweet("just bieber in"));
-	scene.push(new Tweet("justin bieber"));
-	scene.push(new Tweet("bieber justin"));
-	scene.push(new Tweet("just bieber in"));
-	scene.push(new Tweet("justin bieber"));
-	scene.push(new Tweet("bieber justin"));
-	scene.push(new Tweet("just bieber in"));
-	scene.push(new Tweet("justin bieber"));
-	scene.push(new Tweet("bieber justin"));
-	scene.push(new Tweet("just bieber in"));
-	scene.push(new Tweet("justin bieber"));*/
 	scene.push(new GrowArrow([-100.0,10.0],[100.0,100.0],[400.0,400.0],[500.0,300.0]));
 //	new Transition(tweet.position,[0,0],[50,70],10.0);
 //	new Transition(cam.position,[0.0,20.0,0.0],[200.0,0.0,1.0],100.0);
