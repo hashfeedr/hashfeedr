@@ -17,7 +17,6 @@ class HashConnector(BasicOperations):
     def on_read(self, line):
         pass
 
-hc = HashConnector()
-factory = WebSocketFactory(hc)
+factory = WebSocketFactory(HashConnector)
 application = service.Application("hashfeedr")
 reactor.listenTCP(8338, factory)
