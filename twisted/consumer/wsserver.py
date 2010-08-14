@@ -16,19 +16,31 @@ class HashfeedrWebSocket(websocket.WebSocketHandler):
     def __init__(self,transport,request):
         websocket.WebSocketHandler.__init__(self,transport,request)
         self.term = request.postpath[1]
+
+        self.redis = None
         self.connected = True
+
         self.createSubscriber()
         log.msg("%s: New connection (%s), term: %s" % (repr(self),request,self.term))
+
+    def connectionLost(self,reason):
+        log.msg("%s: Connection lost" % repr(self))
+        self.connected = False
+        if (self.redis is not None):
+            self.destroyRedisClient()
 
     @defer.inlineCallbacks
     def createSubscriber(self):
         clientCreator = protocol.ClientCreator(reactor, HashSubscriber)
-        self.redis = yield clientCreator.connectTCP('localhost', 6379)
+        _redis = yield clientCreator.connectTCP('localhost', 6379)
 
         # make the redis subscriber aware of the websocket before it
         # subscribes to the channel
-        self.redis.websocket = self
-        yield self.redis.subscribe("special:all")
+        _redis.websocket = self
+        yield _redis.subscribe("special:all")
+
+        # only set redis when we're completely done
+        self.redis = _redis
 
         # client may already have disconnected before the redis client
         # was connected, so check if we need to destroy it now.
@@ -46,13 +58,6 @@ class HashfeedrWebSocket(websocket.WebSocketHandler):
     def frameReceived(self,frame):
         pass
 
-    def connectionLost(self,reason):
-        log.msg("%s: Connection lost" % repr(self))
-        self.connected = False
-        try:
-            self.destroyRedisClient()
-        except exceptions.AttributeError:
-            pass
 
 application = service.Application("hashfeedr")
 site = websocket.WebSocketSite(util.Redirect("http://twitter.com/justinbieber"))
