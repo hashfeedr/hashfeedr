@@ -13,7 +13,7 @@ from consumer import registrar
 
 class HashSubscriber(RedisSubscriber):
     def messageReceived(self, channel, message):
-        self.websocket.write("channel %s: message: %s" % (channel, message))
+        self.websocket.write(message)
 
 class HashfeedrWebSocket(websocket.WebSocketHandler):
     def __init__(self,transport,request):
