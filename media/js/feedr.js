@@ -17,6 +17,25 @@ function lerp(t,a,b) {
 	return a+(b-a)*t;
 }
 
+function textmetrics(fsize,s) {
+	var lines=s.split("\n");
+	var w=0,h=0;
+	for (var i in lines) {
+		w=Math.max(c.measureText(lines[i]).width,w);
+		h+=fsize;
+	}
+	return [w,h];
+}
+
+function filltext(fsize,s,x,y) {
+	var lines=s.split("\n");
+	var h=0;
+	for (var i in lines) {
+		c.fillText(lines[i],x,y+h);
+		h+=fsize;
+	}
+}
+
 /** @constructor */
 function Camera() {
 	this.position=new Property([0.0,0.0,0.0]); // x,y,angle
@@ -69,8 +88,18 @@ function Tweet() {
 		c.shadowOffsetX=2;
 		c.shadowOffsetY=2;
 		c.shadowBlur=4;
+//		c.fillStyle="#f0f";
+//		c.fillRect(this.position.value[0],this.position.value[1],20,20);
+		
+
+		c.font="50px Gesta-1";
+		c.textBaseline="top";
+		var str="this is my\ntweet, bitch!";
+		var exts=textmetrics(50,str);
 		c.fillStyle="#f0f";
-		c.fillRect(this.position.value[0],this.position.value[1],20,20);
+		c.fillRect(this.position.value[0],this.position.value[1],exts[0],exts[1]);
+		c.fillStyle="#000";
+		filltext(50,str,this.position.value[0],this.position.value[1]);
 	};
 }
 
@@ -118,7 +147,7 @@ function update() {
 function draw() {
 	c.clearRect(0,0,width,height);
 	c.save();
-//	cam.activate();
+	cam.activate();
 	c.beginPath();
 	c.stokeStyle="#0f0";
 	c.lineTo(200,200);
