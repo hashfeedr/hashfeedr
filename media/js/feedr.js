@@ -124,13 +124,13 @@ function Transition(property,start,end,duration) {
 /** @constructor */
 function Tweet(data) {
 	this.position=new Property([100,10]);
-
+	this.margin=16;
 	this.message=data;
 		
 	c.font="50px Gesta-1";
 	var exts=textmetrics(50,this.message);
-	this.width=exts[0];
-	this.height=exts[1];
+	this.width=exts[0]+2*this.margin;
+	this.height=exts[1]+2*this.margin;
 	findnewpos(this);
 	tweets.push(this);
 	
@@ -144,9 +144,9 @@ function Tweet(data) {
 
 		c.font="50px Gesta-1";
 		c.fillStyle="#f0f";
-		c.fillRect(this.position.value[0],this.position.value[1],this.width,this.height);
+		c.fillRect(this.position.value[0]+this.margin,this.position.value[1]+this.margin,this.width-this.margin*2,this.height-this.margin*2);
 		c.fillStyle="#000";
-		filltext(50,this.message,this.position.value[0],this.position.value[1]);
+		filltext(50,this.message,this.position.value[0]+this.margin,this.position.value[1]+this.margin);
 	};
 }
 
