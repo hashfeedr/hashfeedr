@@ -2,6 +2,4 @@ Django==1.2.1
 Twisted==10.1.0
 redis==2.0.0
 -e git+http://github.com/fiorix/twisted-twitter-stream.git@d129de19b35aca55ac37778fcc9a2441800caf3a#egg=TwistedTwitterStream-0.0.1-py2.7-dev
--e git+http://github.com/pietern/txwebsockets.git@fcfa1c03fe572dd3769ff2034dcc6ce5b254ea6f#egg=txwebsockets-0.1-py2.7-dev
 -e git+http://github.com/deldotdr/txRedis.git@b7b75eea4bb17d864418512a04e3e8b7af8a5984#egg=txredis-0.1.2-py2.7-rlotun-master
-
