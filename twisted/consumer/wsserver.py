@@ -6,8 +6,7 @@ from txredis.protocol import RedisBase, Redis, RedisSubscriber
 import sys, random
 
 # non-pip includes
-sys.path.append("twisted/vendor")
-from txwebsocket import websocket
+from vendor.txwebsocket import websocket
 
 class HashSubscriber(RedisSubscriber):
     def messageReceived(self, channel, message):
