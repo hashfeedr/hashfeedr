@@ -160,7 +160,7 @@ class WebSocketRequest(Request):
             self.write("\r\n")
 
             # concatenate num1 (32 bit in), num2 (32 bit int), nonce, and take md5 of result
-            res = struct.pack('>ii8s', num1, num2, nonce)
+            res = struct.pack('>II8s', num1, num2, nonce)
             server_response = md5(res).digest()
             self.write(server_response)
 
