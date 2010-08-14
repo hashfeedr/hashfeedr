@@ -7,5 +7,5 @@
    <!-- Instead of setting to-ports="*",
 administrators can use ranges and commas -->
    <!-- This will allow access to ports 123, 456, 457, and 458 -->
-   <allow-access-from domain="hashfeedr.com" to-ports="8338" />
+   <allow-access-from domain="*" to-ports="8338" />
 </cross-domain-policy>
