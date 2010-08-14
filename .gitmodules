@@ -1,3 +1,0 @@
-[submodule "twisted/vendor/txwebsocket"]
-	path = twisted/vendor/txwebsocket
-	url = http://github.com/myers/txWebSocket.git
