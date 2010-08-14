@@ -28,15 +28,16 @@ function placement(x) {
 	return (Math.sin(t)+Math.sin(2.232*t)+Math.sin(9.876*t)+Math.sin(18.888*t))*50.0+100.0;
 }
 
+function calcangle() {
+	var dy=placement(placementx+1.0)-placement(placementx);
+	return Math.max(Math.min(Math.tan(dy)*0.1,0.2),-0.2);
+}
+
 function boxintersect(x1,y1,w1,h1,x2,y2,w2,h2) {
 	return (x1 <= x2+w2 &&
           x2 <= x1+w1 &&
           y1 <= y2+h2 &&
           y2 <= y1+h1);
-return !(x2 > x1+w1 || 
-		x2+w2 < x1 || 
-		y2 > y1+h1 ||
-		y2+h2 < y1);
 }
 
 function findnewpos(tw) {
@@ -82,8 +83,11 @@ function Camera() {
 	this.position=new Property([0.0,0.0,0.0]); // x,y,angle
 	
 	this.activate=function() {
-		c.translate(-this.position.value[0],-this.position.value[1]);
+		c.translate(width*0.5,height*0.5);
 		c.rotate(this.position.value[2]);
+		c.translate(-this.position.value[0],-this.position.value[1]);
+
+
 	}
 }
 var cam=new Camera();
@@ -204,8 +208,6 @@ function draw() {
 		c.lineTo(i,placement(i));
 	}
 	c.stroke();
-	c.fillStyle="#f00";
-	c.fillRect(10,10,100,100);
 	for (var e in scene) {
 		c.save();
 		scene[e].draw();
@@ -225,7 +227,7 @@ $(function(){
 	$("#thecanvas").click(function(){
 		var t=new Tweet("justin bieber");
 		scene.push(t);
-		new Transition(cam.position,cam.position.value,[t.position.value[0]-width*0.5,t.position.value[1]-height*0.5,cam.position.value[2]],30.0);
+		new Transition(cam.position,cam.position.value,[t.position.value[0],t.position.value[1],calcangle()],30.0);
 	});
 /*	scene.push(new Tweet("bieber justin"));
 	scene.push(new Tweet("just bieber in"));
