@@ -1,4 +1,22 @@
-<br />
-<b>Warning</b>:  require_once(django.php) [<a href='function.require-once'>function.require-once</a>]: failed to open stream: No such file or directory in <b>/var/www/hashfeedr/index.php</b> on line <b>2</b><br />
-<br />
-<b>Fatal error</b>:  require_once() [<a href='function.require'>function.require</a>]: Failed opening required 'django.php' (include_path='.:/usr/share/php:/usr/share/pear') in <b>/var/www/hashfeedr/index.php</b> on line <b>2</b><br />
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<title>Hashfeeder</title>
+		<link rel="stylesheet" href="{{ MEDIA_URL }}css/global.css">
+	</head>
+	<body>
+		<h1>HashFeedr</h1>
+		<h2>Getting started</h2>
+		<p>
+		To get started, simply enter a hashtag in the big box below and hit the big button
+		<form action="." method="POST">
+		{% csrf_token %}
+		{{ form.as_p}}
+		</form>
+		</p>
+		<h2>About HashFeedr</h2>
+		<p>There is no time for this</p>
+		
+	</body>
+</html>
