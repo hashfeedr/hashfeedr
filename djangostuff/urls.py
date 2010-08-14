@@ -1,3 +1,5 @@
+import os
+import settings
 from django.conf.urls.defaults import *
 
 # Uncomment the next two lines to enable the admin:
@@ -18,3 +20,8 @@ urlpatterns = patterns('',
 	(r'^$', 'hashfeedr.views.landing_page'),
 	(r'^feed/(\w+)$', 'hashfeedr.views.feeder'),
 )
+
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': os.path.join(os.path.dirname(__file__),'..','media')}),
+    )
