@@ -24,8 +24,8 @@ function lerp(t,a,b) {
 }
 
 function placement(x) {
-	var t=x*0.001;
-	return (Math.sin(t)+Math.sin(2.232*t)+Math.sin(9.876*t)+Math.sin(8.888*t))*50.0+100.0;
+	var t=x*0.006;
+	return (Math.sin(t)+Math.sin(2.232*t)+Math.sin(9.876*t)+Math.sin(18.888*t))*50.0+100.0;
 }
 
 function boxintersect(x1,y1,w1,h1,x2,y2,w2,h2) {
@@ -82,7 +82,7 @@ function Camera() {
 	this.position=new Property([0.0,0.0,0.0]); // x,y,angle
 	
 	this.activate=function() {
-		c.translate(this.position.value[0],this.position.value[1]);
+		c.translate(-this.position.value[0],-this.position.value[1]);
 		c.rotate(this.position.value[2]);
 	}
 }
@@ -182,6 +182,7 @@ function resizecanvas() {
 	c.canvas.width=width;
 	c.canvas.height=height;
 	c.textBaseline="top";
+	draw();
 }
 
 function update() {
@@ -221,18 +222,23 @@ $(function(){
 	$(window).resize(resizecanvas);
 
 
-	scene.push(new Tweet("foo"));
-	scene.push(new Tweet("bar"));
+	$("#thecanvas").click(function(){
+		var t=new Tweet("justin bieber");
+		scene.push(t);
+		new Transition(cam.position,cam.position.value,[t.position.value[0]-width*0.5,t.position.value[1]-height*0.5,cam.position.value[2]],30.0);
+	});
+/*	scene.push(new Tweet("bieber justin"));
+	scene.push(new Tweet("just bieber in"));
 	scene.push(new Tweet("justin bieber"));
-	scene.push(new Tweet("foo"));
-	scene.push(new Tweet("bar"));
+	scene.push(new Tweet("bieber justin"));
+	scene.push(new Tweet("just bieber in"));
 	scene.push(new Tweet("justin bieber"));
-	scene.push(new Tweet("foo"));
-	scene.push(new Tweet("bar"));
+	scene.push(new Tweet("bieber justin"));
+	scene.push(new Tweet("just bieber in"));
 	scene.push(new Tweet("justin bieber"));
-	scene.push(new Tweet("foo"));
-	scene.push(new Tweet("bar"));
-	scene.push(new Tweet("justin bieber"));
+	scene.push(new Tweet("bieber justin"));
+	scene.push(new Tweet("just bieber in"));
+	scene.push(new Tweet("justin bieber"));*/
 	scene.push(new GrowArrow([-100.0,10.0],[100.0,100.0],[400.0,400.0],[500.0,300.0]));
 //	new Transition(tweet.position,[0,0],[50,70],10.0);
 //	new Transition(cam.position,[0.0,20.0,0.0],[200.0,0.0,1.0],100.0);
