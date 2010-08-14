@@ -14,4 +14,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     # (r'^admin/', include(admin.site.urls)),
+
+	(r'^$', 'hashfeedr.views.landing_page'),
+	(r'^feed/(\w+)$', 'hashfeedr.views.feeder'),
 )
