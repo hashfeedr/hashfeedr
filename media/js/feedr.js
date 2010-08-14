@@ -43,6 +43,14 @@ function boxintersect(x1,y1,w1,h1,x2,y2,w2,h2) {
           y2 <= y1+h1);
 }
 
+function eradicate() {
+	for (var i=0;i<tweets.length;++i) {
+		if (tweets[i].position.value[0]<placementx-500) {
+			tweets.splice(i--,1);
+		}
+	}
+}
+
 function findnewpos(tw) {
 	var found=false,x=0,y=0;
 	var w=tw.width;
@@ -129,12 +137,12 @@ function Transition(property,start,end,duration) {
 }
 
 /** @constructor */
-function Tweet(data) {
+function Tweet(message,avatar) {
 	this.position=new Property([100,10]);
 	this.charpos=new Property([0]);
 	this.margin=16;
 	this.padding=8;
-	this.message=data;
+	this.message=message;
 	
 	var l=this.message.split(" ");
 	var s="",n=0;
@@ -156,7 +164,7 @@ function Tweet(data) {
 	tweets.push(this);
 
 	this.avatar=new Image();
-	this.avatar.src="https://s3.amazonaws.com/twitter_production/profile_images/57432055/My_Fabulous_MicroMoog-1_bigger.jpg";
+	this.avatar.src=avatar.replace(/normal.jpg$/,"bigger.jpg");
 
 	new Transition(this.charpos,[0],[this.message.length],10);
 	
@@ -169,9 +177,9 @@ function Tweet(data) {
 		c.save();
 		c.translate(this.position.value[0],this.position.value[1]);
 		
-		c.fillStyle="rgba(0,0,0,0.4)";
+		c.fillStyle="rgba(0,0,0,1.0)";
 		c.fillRect(this.margin,this.margin,this.width-this.margin*2,this.height-this.margin*2);
-		c.strokeStyle="rgba(0,0,0,1)";
+		c.strokeStyle="rgba(255,255,255,0.6)";
 		c.strokeRect(this.margin,this.margin,this.width-this.margin*2,this.height-this.margin*2);
 		
 		if (this.avatar.complete==true) {
@@ -231,6 +239,7 @@ function update() {
 			transitions.splice(t--,1);
 		}
 	}
+	eradicate();
 	return transitions.length>0?true:false;
 }
 
@@ -271,9 +280,12 @@ $(function(){
 		if (update()) draw();
 	},framedelay);
       
-//	var ws = new WebSocket("ws://hashfeedr.com:8338/websession");
-//		ws.onmessage = function(e) {
-//		scene.push(new Tweet(e.data));
-//	}
+	var ws = new WebSocket("ws://hashfeedr.com:8338/websession");
+		ws.onmessage = function(e) {
+			var data=$.parseJSON(e.data);
+			var t=new Tweet(data.status.text,data.status.user.profile_image_url);
+			scene.push(t);
+			new Transition(cam.position,cam.position.value,[t.position.value[0]+t.width*0.5,t.position.value[1]+t.height*0.5,calcangle()],20.0);
+	}
 });
 
