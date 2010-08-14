@@ -150,8 +150,8 @@ function Tweet(data) {
 
 	c.font=fontsize+"px "+fontface;
 	var exts=textmetrics(fontsize,this.message);
-	this.width=64+this.padding*2+exts[0]+2*this.margin;
-	this.height=Math.max(exts[1],64+this.padding*2)+2*this.margin;
+	this.width=64+this.padding*3+exts[0]+2*this.margin;
+	this.height=Math.max(exts[1],64)+2*this.padding+2*this.margin;
 	findnewpos(this);
 	tweets.push(this);
 
@@ -162,24 +162,30 @@ function Tweet(data) {
 	
 	this.draw=function() {
 		c.shadowColor="rgba(0,0,0,0.4)";
-		c.shadowOffsetX=2;
-		c.shadowOffsetY=2;
-		c.shadowBlur=4;
-//		c.fillStyle="#f0f";
-//		c.fillRect(this.position.value[0],this.position.value[1],20,20);
+		c.shadowOffsetX=0;
+		c.shadowOffsetY=0;
+		c.shadowBlur=16;
 
 		c.save();
 		c.translate(this.position.value[0],this.position.value[1]);
 		
-		c.fillStyle="#f0f";
+		c.fillStyle="rgba(0,0,0,0.4)";
 		c.fillRect(this.margin,this.margin,this.width-this.margin*2,this.height-this.margin*2);
+		c.strokeStyle="rgba(0,0,0,1)";
+		c.strokeRect(this.margin,this.margin,this.width-this.margin*2,this.height-this.margin*2);
 		
-		if (this.avatar.complete==true) 
+		if (this.avatar.complete==true) {
+			c.shadowBlur=0;
 			c.drawImage(this.avatar,this.margin+this.padding,this.margin+this.padding,64,64);
+		}
 
+		c.shadowColor="rgba(0,0,0,0.4)";
+		c.shadowOffsetX=2;
+		c.shadowOffsetY=2;
+		c.shadowBlur=4;
 		c.font=fontsize+"px "+fontface;
-		c.fillStyle="#000";
-		filltext(fontsize,this.message.substr(0,this.charpos.value[0]),this.margin+this.padding*2+64,this.margin);
+		c.fillStyle="#ccc";
+		filltext(fontsize,this.message.substr(0,this.charpos.value[0]),this.margin+this.padding*2+64,this.margin+this.padding-4);
 		c.restore();
 	};
 }
@@ -232,11 +238,11 @@ function draw() {
 	c.drawImage(backdrop,0,0,width,height);
 	c.save();
 	cam.activate();
-	c.strokeStyle="#fff";
-	c.beginPath();
-	for (var i=0;i<1000.0;i+=1) {
-		c.lineTo(i,placement(i));
-	}
+//	c.strokeStyle="#fff";
+//	c.beginPath();
+//	for (var i=0;i<1000.0;i+=1) {
+//		c.lineTo(i,placement(i));
+//	}
 	c.stroke();
 	for (var e in scene) {
 		c.save();
