@@ -8,6 +8,9 @@ import sys, random
 # non-pip includes
 from vendor.txwebsocket import websocket
 
+# project imports
+from consumer import registrar
+
 class HashSubscriber(RedisSubscriber):
     def messageReceived(self, channel, message):
         self.websocket.write("channel %s: message: %s" % (channel, message))
@@ -46,9 +49,13 @@ class HashfeedrWebSocket(websocket.WebSocketHandler):
         # was connected, so check if we need to destroy it now.
         if (not self.connected):
             self.destroyRedisClient()
+        else:
+            # ping our registrar
+            yield registrar.Registrar.addSocket(self)
 
     @defer.inlineCallbacks
     def destroyRedisClient(self):
+        yield registrar.Registrar.removeSocket(self)
         yield self.redis.unsubscribe()
         yield self.redis.transport.loseConnection()
 
@@ -62,4 +69,13 @@ class HashfeedrWebSocket(websocket.WebSocketHandler):
 application = service.Application("hashfeedr")
 site = websocket.WebSocketSite(util.Redirect("http://twitter.com/justinbieber"))
 site.addHandler("/ws", HashfeedrWebSocket)
-reactor.listenTCP(8338, site)
+
+# open up the port after we've established a connection to the registrar
+def start_listening(status,site):
+    port = 8338
+    reactor.listenTCP(port,site)
+    log.msg("Now listening on port %d" % port)
+
+# first establish a connection to the registrar
+deferred = registrar.Registrar.connect('localhost',6379)
+deferred.addCallback(start_listening,site)
