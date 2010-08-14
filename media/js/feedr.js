@@ -17,6 +17,17 @@ function lerp(t,a,b) {
 	return a+(b-a)*t;
 }
 
+/** @constructor */
+function Camera() {
+	this.position=new Property([0.0,0.0,0.0]); // x,y,angle
+	
+	this.activate=function() {
+		c.translate(this.position.value[0],this.position.value[1]);
+		c.rotate(this.position.value[2]);
+	}
+}
+var cam=new Camera();
+
 /* easing stuff */
 function easeinout(t) {
 	return -0.5*(Math.cos(Math.PI*t)-1);
@@ -76,11 +87,22 @@ function update() {
 			transitions.splice(t--,1);
 		}
 	}
-	return true;
+	if (transitions.length>0) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 function draw() {
 	c.clearRect(0,0,width,height);
+	c.save();
+	cam.activate();
+	c.beginPath();
+	c.stokeStyle="#0f0";
+	c.lineTo(200,200);
+	c.lineTo(200,300);
+	c.stroke();
 	c.fillStyle="#f00";
 	c.fillRect(10,10,100,100);
 	for (var e in scene) {
@@ -88,6 +110,7 @@ function draw() {
 		scene[e].draw();
 		c.restore();
 	}
+	c.restore();
 }
 
 $(function(){
@@ -98,9 +121,8 @@ $(function(){
 
 	tweet=new Tweet();
 	scene.push(tweet);
-	new Transition(tweet.position,[0,0],[50,70],10);
-
-//	draw(); // DEBUG
+	new Transition(tweet.position,[0,0],[50,70],10.0);
+	new Transition(cam.position,[0.0,20.0,0.0],[200.0,0.0,1.0],100.0);
 
 	setInterval(function(){
 		if (update()) draw();
