@@ -8,7 +8,7 @@ class HashDispenser(TwistedTwitterStream.TweetReceiver):
         pass
 
     def tweetReceived(self,tweet):
-        self.redis.publish('foo',repr(tweet))
+        self.redis.publish('special:all',repr(tweet))
         pass
 
 def consume(username,password,redis,track=[]):
