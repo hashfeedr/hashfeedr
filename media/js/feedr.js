@@ -10,7 +10,7 @@ var camrot=0.0;
 
 function catmullrom(t,x0,x1,x2,x3){
 	var t2=t*t,t3=t2*t;
-	return 0.5*((2*x1)+(-x0+x2)*t+(2*x0-5*x1+4*x2-x3)*t2+(-x0+3*x1-3*x2+x3)*t3);
+	return 0.5*((2.0*x1)+(-x0+x2)*t+(2.0*x0-5.0*x1+4.0*x2-x3)*t2+(-x0+3.0*x1-3.0*x2+x3)*t3);
 }
 
 function lerp(t,a,b) {
@@ -74,6 +74,31 @@ function Tweet() {
 	};
 }
 
+/** @constructor */
+function GrowArrow(p0,p1,p2,p3) {
+	this.p0=new Property(p0);
+	this.p1=new Property(p1);
+	this.p2=new Property(p2);
+	this.p3=new Property(p3);
+	this.steps=new Property([0]);
+	new Transition(this.steps,[0],[25],20);
+	this.maxsteps=25.0;
+	this.increment=1.0/this.maxsteps;
+
+	this.draw=function() {
+		c.strokeStyle="#000";
+		c.lineWidth=10;
+		c.shadowBlur=40;
+		c.shadowColor="#f00";
+		c.beginPath();
+		for (var i=0;i<this.steps.value[0];++i) {
+			var t=i*this.increment;
+			c.lineTo(catmullrom(t,this.p0.value[0],this.p1.value[0],this.p2.value[0],this.p3.value[0]),catmullrom(t,this.p0.value[1],this.p1.value[1],this.p2.value[1],this.p3.value[1]));
+		}
+		c.stroke();
+	}
+}
+
 function resizecanvas() {
 	width=c.canvas.clientWidth;
 	height=c.canvas.clientHeight;
@@ -87,17 +112,13 @@ function update() {
 			transitions.splice(t--,1);
 		}
 	}
-	if (transitions.length>0) {
-		return true;
-	} else {
-		return false;
-	}
+	return transitions.length>0?true:false;
 }
 
 function draw() {
 	c.clearRect(0,0,width,height);
 	c.save();
-	cam.activate();
+//	cam.activate();
 	c.beginPath();
 	c.stokeStyle="#0f0";
 	c.lineTo(200,200);
@@ -121,6 +142,7 @@ $(function(){
 
 	tweet=new Tweet();
 	scene.push(tweet);
+	scene.push(new GrowArrow([-100.0,10.0],[100.0,100.0],[400.0,400.0],[500.0,300.0]));
 	new Transition(tweet.position,[0,0],[50,70],10.0);
 	new Transition(cam.position,[0.0,20.0,0.0],[200.0,0.0,1.0],100.0);
 
