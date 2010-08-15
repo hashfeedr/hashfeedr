@@ -138,6 +138,36 @@ function Transition(property,start,end,duration) {
 }
 
 /** @constructor */
+function PictureBox(src) {
+	this.position=new Property([0,0]);
+	this.image=new Image();
+	this.image.src=src;
+	this.loaded=false;
+	this.width=0;
+	this.height=0;
+
+	var self=this;
+	this.image.onload=function() {
+		self.loaded=true;
+		self.width=this.width;
+		self.height=this.height;
+		findnewpos(self);
+		tweets[tweets.length]=[self];
+	};
+
+	this.draw=function() {
+		if (self.loaded) {
+			c.save();
+			c.translate(this.position.value[0],this.position.value[1]);
+			c.drawImage(this.image,0,0);
+			c.restore();
+		}
+	};
+}
+
+new PictureBox("http://www.mandeeps.com/Portals/8/banana.jpg");
+
+/** @constructor */
 function Tweet(message,avatar,username) {
 	this.position=new Property([100,10]);
 	this.charpos=new Property([0]);
