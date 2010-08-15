@@ -17,6 +17,7 @@ class Registrar(object):
     @defer.inlineCallbacks
     def addSocket(klass,websocket):
         value = yield klass.redis.zincr('terms', websocket.term, 1)
+        yield klass.redis.incr('stats:streams')
 
         # notify the producer when this term was introduced
         if value == 1:
@@ -30,6 +31,7 @@ class Registrar(object):
         # ugly: calling redis api straight from here, but easy for now
         klass.redis._mb_cmd('ZREMRANGEBYSCORE', 'terms', '-inf', '0')
         removed = yield klass.redis.getResponse()
+        yield klass.redis.decr('stats:streams')
 
         # notify the producer when something changed
         if removed > 0:
