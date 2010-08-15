@@ -50,7 +50,9 @@ class TweetCounter(object):
         self.count = 0
         self.redis = redis
         self.task = task.LoopingCall(self.post)
-        self.task.start(60)
+        self.task.start(1)
+        self.redis.delete('stats:tps')
+        self.redis.delete('stats:tpm')
 
     def incr(self):
         self.count += 1
@@ -60,4 +62,12 @@ class TweetCounter(object):
     def post(self):
         cnt = self.count
         self.count = 0
-        yield self.redis.set('stats:tpm',cnt)
+
+        # add number to list, and subtract popped element
+        # when list size is longer than one minute
+        num = yield self.redis.push('stats:tps',cnt,tail=True)
+        if num > 60:
+            popped = yield self.redis.pop('stats:tps',tail=False)
+            cnt -= popped
+
+        yield self.redis.incr('stats:tpm',cnt)
