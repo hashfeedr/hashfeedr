@@ -55,7 +55,7 @@ MEDIA_ROOT = ''
 MEDIA_URL = '/media/'
 
 # Supply the URL For the websocket service
-WEBSOCKET_URL = 'ws://hashfeedr.com:8338/ws/'
+WEBSOCKET_URL = 'ws://hashfeedr.com:8338/ws?q='
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
