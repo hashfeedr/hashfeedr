@@ -1,6 +1,7 @@
 from twisted.internet import reactor, task, protocol, defer
 from twisted.python import log
 from txredis.protocol import RedisBase, Redis
+from misc import keepalive
 
 class Registrar(object):
     @classmethod
@@ -10,15 +11,7 @@ class Registrar(object):
         klass.redis = yield clientCreator.connectTCP(host,port)
 
         # ping redis every 30s for connection keepalive
-        klass.keepalive = task.LoopingCall(klass.keepalive)
-        klass.keepalive.start(30)
-    
-    @classmethod
-    @defer.inlineCallbacks
-    def keepalive(klass):
-        log.msg("%s: Keepalive ping" % repr(klass))
-        resp = yield klass.redis.ping()
-        pass
+        keepalive.KeepAlive.attach(klass.redis.ping)
 
     @classmethod
     @defer.inlineCallbacks
