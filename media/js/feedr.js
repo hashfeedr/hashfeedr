@@ -275,6 +275,14 @@ function draw() {
 	c.fillText("#tweets: "+tweets.length,0,0);
 }
 
+function parsemessage(msg) {
+	var data=$.parseJSON(msg);
+	console.log(data);
+	tweets[tweets.length]=([new Tweet(data.tweet.text,data.tweet.user.profile_image_url)]);
+	var t=tweets[tweets.length-1];
+	new Transition(cam.position,cam.position.value,[t[0].position.value[0]+t[0].width*0.5,t[0].position.value[1]+t[0].height*0.5,calcangle()],20.0);
+}
+
 $(function(){
 	c=$("#thecanvas").get(0).getContext("2d");
 
@@ -295,12 +303,8 @@ $(function(){
 	},framedelay);
       
 	var ws = new WebSocket("ws://hashfeedr.com:8338/ws/bieberpenis");
-		ws.onmessage = function(e) {
-			var data=$.parseJSON(e.data);
-			console.log(data);
-			tweets[tweets.length]=([new Tweet(data.tweet.text,data.tweet.user.profile_image_url)]);
-			var t=tweets[tweets.length-1];
-			new Transition(cam.position,cam.position.value,[t[0].position.value[0]+t[0].width*0.5,t[0].position.value[1]+t[0].height*0.5,calcangle()],20.0);
-	}
+	ws.onmessage = function(e) {
+		parsemessage(e.data);
+	};
 });
 
