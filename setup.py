@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-	name="hashfeedr"
-	version="0.1"
+	name="hashfeedr",
+	version="0.1",
 	author="The Simply Wild Hashfeedr Team",
 	author_email="piet@koffietijd.net",
 	description="Check ze tweets",
