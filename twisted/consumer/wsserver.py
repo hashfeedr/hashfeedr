@@ -19,7 +19,7 @@ class HashSubscriber(RedisSubscriber):
 class HashfeedrWebSocket(websocket.WebSocketHandler):
     def __init__(self,transport,request):
         websocket.WebSocketHandler.__init__(self,transport,request)
-        self.term = request.postpath[1]
+        self.term = request.args['q'][0]
 
         self.redis = None
         self.connected = True
