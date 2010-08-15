@@ -45,7 +45,8 @@ function boxintersect(x1,y1,w1,h1,x2,y2,w2,h2) {
 
 function eradicate() {
 	for (var i=0;i<tweets.length;++i) {
-		if (tweets[i].position.value[0]<placementx-500) {
+		if (tweets[i][0].position.value[0]<placementx-2000) {
+			delete tweets[i][0];
 			tweets.splice(i--,1);
 		}
 	}
@@ -61,7 +62,7 @@ function findnewpos(tw) {
 		x=placementx-tw.width*0.5;
 		y=placement(placementx)-tw.height*0.5;
 		for (var i=0;i<tweets.length;++i) {
-			if (boxintersect(x,y,w,h,tweets[i].position.value[0],tweets[i].position.value[1],tweets[i].width,tweets[i].height)) {
+			if (boxintersect(x,y,w,h,tweets[i][0].position.value[0],tweets[i][0].position.value[1],tweets[i][0].width,tweets[i][0].height)) {
 				found=false;
 				break;
 			}
@@ -239,8 +240,12 @@ function update() {
 			transitions.splice(t--,1);
 		}
 	}
-	eradicate();
-	return transitions.length>0?true:false;
+	if (transitions.length>0) {
+		eradicate();
+		return true;
+	} else {
+		return false;
+	}
 }
 
 function draw() {
@@ -260,7 +265,14 @@ function draw() {
 		scene[e].draw();
 		c.restore();
 	}
+	for (var e=0;e<tweets.length;e++) {
+		c.save();
+		tweets[e][0].draw();
+		c.restore();
+	}
 	c.restore();
+
+	c.fillText("#tweets: "+tweets.length,0,0);
 }
 
 $(function(){
@@ -286,9 +298,11 @@ $(function(){
 		ws.onmessage = function(e) {
 			var data=$.parseJSON(e.data);
 			console.log(data);
-			var t=new Tweet(data.text,data.user.profile_image_url);
-			scene.push(t);
-			new Transition(cam.position,cam.position.value,[t.position.value[0]+t.width*0.5,t.position.value[1]+t.height*0.5,calcangle()],20.0);
+//			var t=[new Tweet(data.text,data.user.profile_image_url)];
+//			tweets.push(t);
+			tweets[tweets.length]=([new Tweet(data.text,data.user.profile_image_url)]);
+			var t=tweets[tweets.length-1];
+			new Transition(cam.position,cam.position.value,[t[0].position.value[0]+t[0].width*0.5,t[0].position.value[1]+t[0].height*0.5,calcangle()],20.0);
 	}
 });
 
