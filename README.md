@@ -49,7 +49,7 @@ out of the box.
 
 To start the Django app, first make sure so change the `WEBSOCKET_URL` variable
 in `./djangostuff/settings.py` to match your testing environment (e.g. change
-the host to be `localhost`). Next, the Django app can be booted by changing
+the host to be the server running twisted). Next, the Django app can be booted by changing
 your working directory to `./djangostuff` and executing:
 
     gunicorn_django
