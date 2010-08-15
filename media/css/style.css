@@ -304,3 +304,6 @@ ul {
 li {
 	list-style-type:none;
 }
+h2.error {
+	font-size: 2.5em;
+}
