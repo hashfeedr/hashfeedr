@@ -50,4 +50,3 @@ class HashDispenser(TwistedTwitterStream.TweetReceiver):
         for monitored in self.monitor.terms:
             if monitored in terms:
                 self.redis.publish('term:%s' % monitored,p)
-        pass
