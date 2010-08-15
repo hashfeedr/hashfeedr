@@ -29,4 +29,4 @@ class Monitor(object):
     def refresh(self, *args):
         resp = yield self.redis.zrange('terms', '0', '-1', reverse=True)
         self.terms = set(resp)
-        log.msg("Updated tracking words: %s" % repr(self.terms))
+        log.msg("Tracking words: %s" % repr(self.terms))
