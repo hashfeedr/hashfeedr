@@ -4,6 +4,8 @@ var framedelay=60;
 var fontsize=26;
 var linelength=20;
 var fontface="DroidSansRegular";
+var scalefactor=1.0;
+var aspect=1.0;
 
 var scene=[];
 var transitions=[];
@@ -33,7 +35,7 @@ function placement(x) {
 
 function calcangle() {
 	var dy=placement(placementx+1.0)-placement(placementx);
-	return Math.max(Math.min(Math.tan(dy)*0.1,0.1),-0.1);
+	return Math.max(Math.min(Math.tan(dy)*0.1,0.1/aspect),-0.1/aspect);
 }
 
 function boxintersect(x1,y1,w1,h1,x2,y2,w2,h2) {
@@ -45,7 +47,7 @@ function boxintersect(x1,y1,w1,h1,x2,y2,w2,h2) {
 
 function eradicate() {
 	for (var i=0;i<tweets.length;++i) {
-		if (tweets[i][0].position.value[0]<placementx-2000) {
+		if (tweets[i][0].position.value[0]<placementx-2000*aspect) {
 			tweets[i][0].release();
 			delete tweets[i][0];
 			tweets.splice(i--,1);
@@ -96,7 +98,7 @@ function Camera() {
 	this.position=new Property([0.0,0.0,0.0]); // x,y,angle
 	
 	this.activate=function() {
-		c.translate(width*0.5,height*0.5+128);
+		c.translate(800*aspect,500);
 		c.rotate(this.position.value[2]);
 		c.translate(-this.position.value[0],-this.position.value[1]);
 	}
@@ -308,6 +310,10 @@ function resizecanvas() {
 	c.canvas.width=width;
 	c.canvas.height=height;
 	c.textBaseline="top";
+
+	scalefactor=parseFloat(height)/1000.0;
+	aspect=parseFloat(width)/parseFloat(height)
+
 	draw();
 }
 
@@ -332,7 +338,7 @@ function draw() {
 	c.fillStyle="#0b1d3a";
 	c.fillRect(0,0,width,height);
 	c.save();
-	c.scale(0.8,0.8);
+	c.scale(scalefactor,scalefactor);
 	cam.activate();
 //	c.strokeStyle="#fff";
 //	c.beginPath();
