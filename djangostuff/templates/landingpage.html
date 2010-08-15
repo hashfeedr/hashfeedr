@@ -1,32 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8">
-		<title>Hashfeeder</title>
-		<link rel="stylesheet" href="{{ MEDIA_URL }}css/global.css">
-	</head>
-	<body>
-		<h1>HashFeedr</h1>
-		<h2>Getting started</h2>
-		<p>
-		To get started, simply enter a hashtag in the big box below and hit the big button
-		<form action="/gofeed" method="GET" id="queryform">
-		<input type="text" name="query" id="query" value="#djangodash">
-		<input type="submit" id="gobutton" value="Big Button">
-		</form>
-		</p>
-		<h2>Popular active hashfeeds</h2>
-		<ul>
-		{% for keyword in toptweets %}
-		<li><a href="/feed/{{ keyword.1 }}">{{ keyword.0 }}</a></li>
-		{% endfor %}
-		</ul>
-		<h2>About HashFeedr</h2>
-		<p>There is no time for this.</p>
-		
+		<meta charset="utf-8" />
+		<title>Hashfeedr</title>
+		<meta name="description" content="Hashfeedr is a real-time twitter visualization suitable for public viewing." />
+		<meta name="author" content="Hashfeedr" />
+		<meta name="Copyright" content="Copyright Hashfeedr 2010." />
+		<meta name="google-site-verification" content="NOOP" />
+		<link rel="shortcut icon" href="{{ MEDIA_URL }}images/favicon.png"/>
+		<link rel="stylesheet" href="{{ MEDIA_URL }}css/style.css" media="all" />
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 		<script>!window.jQuery && document.write('<script src="{{ MEDIA_URL }}js/jquery-1.4.2.min.js"><\/script>')</script>
 		<script src="{{ MEDIA_URL }}js/landing.js"></script>
-		
+	</head>
+	<body>
+		<section class="c12">
+			<header class="g12">
+				<h1>Hashfeedr -- Check ze tweets!</h1>
+			</header>
+			<article class="g12">
+				<h2>Getting Started</h2>
+				<p>To get started, simply enter a hashtag in the big box below and hit the big button</p>
+				<form action="/gofeed" method="GET" id="queryform" class="clearfix">
+					<input type="submit" id="gobutton" value="Go!"/>
+					<input type="text" name="query" id="query" value="#djangodash"/>
+				</form>
+			</article>
+			<article class="g6">
+				<h2>About HashFeedr</h2>
+				<p>There is no time for this.</p>
+				<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/BlvJnW65Z9U?fs=1&amp;hl=en_US&amp;rel=0"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/BlvJnW65Z9U?fs=1&amp;hl=en_US&amp;rel=0" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object>
+			</article>
+			<article class="g6">
+				<h2>Popular active hashfeeds</h2>
+				<ul>
+					{% for keyword in toptweets %}
+						<li><a href="/feed/{{ keyword.1 }}">{{ keyword.0 }}</a></li>
+					{% endfor %}
+				</ul>
+			</article>
+			<footer class="g12">
+				<p><small>&copy; Copyright Hashfeedr 2010. Use HTML5 enabled browsers or die.</small></p>
+			</footer>
+		</section>
 	</body>
 </html>
