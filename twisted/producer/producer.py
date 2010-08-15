@@ -15,5 +15,5 @@ application = service.Application("hashfeedr-producer")
 m = monitor.Monitor()
 
 # some sample tracking words
-track = ['obama']
+track = ['twitpic', 'yfrog', 'moby.to', 'tweetphoto']
 dispenser = hashdispenser.HashDispenser.consume(m,redis,track)

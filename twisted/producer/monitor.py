@@ -1,6 +1,7 @@
 from twisted.internet import reactor, task, protocol, defer
 from twisted.python import log
 from txredis.protocol import RedisBase, Redis, RedisSubscriber
+from misc import keepalive
 import os, sys
 
 class TriggerSubscriber(RedisSubscriber):
@@ -16,7 +17,12 @@ class Monitor(object):
     @defer.inlineCallbacks
     def deferred_initialize(self):
         clientCreator = protocol.ClientCreator(reactor,Redis)
+
+        # passive connection, do an active keepalive
         self.redis = yield clientCreator.connectTCP('localhost', 6379)
+        keepalive.KeepAlive.attach(self.redis.ping)
+
+        # subscribers have no timeout
         triggerCreator = protocol.ClientCreator(reactor,TriggerSubscriber)
         _trigger = yield triggerCreator.connectTCP('localhost', 6379)
 
