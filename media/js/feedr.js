@@ -171,7 +171,7 @@ function PictureBox(src) {
 	};
 }
 
-new PictureBox("http://www.mandeeps.com/Portals/8/banana.jpg");
+new PictureBox("https://s3.amazonaws.com/twitter_production/profile_images/57432055/My_Fabulous_MicroMoog-1_bigger.jpg");
 
 /** @constructor */
 function Tweet(message,avatar,username) {
@@ -323,6 +323,9 @@ function parsemessage(msg) {
 	tweets[tweets.length]=([new Tweet(data.tweet.text,data.tweet.user.profile_image_url,data.tweet.user.screen_name)]);
 	var t=tweets[tweets.length-1];
 	new Transition(cam.position,cam.position.value,[t[0].position.value[0]+t[0].width*0.5,t[0].position.value[1]+t[0].height*0.5,calcangle()],20.0);
+	if ("image" in data) {
+		new PictureBox(data.image);
+	}
 }
 
 $(function(){
@@ -344,7 +347,7 @@ $(function(){
 		if (update()) draw();
 	},framedelay);
       
-	var ws = new WebSocket("ws://hashfeedr.com:8338/ws/bieberpenis");
+	var ws = new WebSocket("ws://hashfeedr.com:8338/ws/yfrog");
 	ws.onmessage = function(e) {
 		parsemessage(e.data);
 	};
