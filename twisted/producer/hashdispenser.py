@@ -33,5 +33,7 @@ class HashDispenser(TwistedTwitterStream.TweetReceiver):
 
     def tweetReceived(self,tweet):
         terms = self.split(tweet["text"])
-        self.redis.publish('special:all',json.dumps(tweet))
+        for monitored in self.monitor.terms:
+            if monitored in terms:
+                self.redis.publish('term:%s' % monitored,json.dumps(tweet))
         pass
