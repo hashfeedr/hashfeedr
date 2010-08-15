@@ -145,18 +145,17 @@ input, select {
 
 body {
 	background: #aaa;
+	background: #122d5c url('/media/images/background.png') no-repeat top center;
 }
 
 section {
 	text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
 	color:#fff;
 	font: 16px DroidSansRegular, Arial, Helvetica Neue, sans-serif;
-
-	background:#444;
 }
 
 header {
-	margin: 32px 0;
+	margin: 0 0;
 	text-align:center;
 }
 
@@ -166,8 +165,9 @@ header h1 {
 	color: -webkit-gradient(linear, left top, left bottom, from(#7db72f), to(#4e7d0e));
 	color: -moz-linear-gradient(top,  #7db72f,  #4e7d0e);
 	text-shadow: 1px 2px 3px #000;
-	line-height: 68px;
+	line-height: 80px;
 	letter-spacing: -2px;
+	margin-top: 96px;
 }
 
 header p {
@@ -175,6 +175,9 @@ header p {
 	color:#fff;
 	font: 12px DroidSansRegular, Arial, Helvetica Neue, sans-serif;
 	letter-spacing: 9px;
+	position:relative;
+	left:-12px;
+	top:-6px;
 }
 
 header span {
