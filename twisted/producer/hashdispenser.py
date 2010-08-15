@@ -47,13 +47,16 @@ class HashDispenser(TwistedTwitterStream.TweetReceiver):
 
     def split(self,text):
         sentences = re.split(r"\s*(\.+\s|,+)\s*", text.lower())
-        sentences = [re.split(r"\s*(\s+|http://|\/|\.|\#|\-|\')\s*",x) for x in sentences]
+        sentences = [re.split(r"\s*(\s+|http://|\/|\.|\-|\')\s*",x) for x in sentences]
 
         terms = set()
         for words in sentences:
             for word in words:
                 if len(word) < 3:
                     continue
+                # add term without hash as well
+                if word.startswith('#'):
+                    terms.add(word[1:])
                 terms.add(word)
         return terms
 
