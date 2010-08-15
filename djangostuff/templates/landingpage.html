@@ -1,24 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<title>Hashfeedr</title>
-		<meta name="description" content="Hashfeedr is a real-time twitter visualization suitable for public viewing." />
-		<meta name="author" content="Hashfeedr" />
-		<meta name="Copyright" content="Copyright Hashfeedr 2010." />
-		<meta name="google-site-verification" content="NOOP" />
-		<link rel="shortcut icon" href="{{ MEDIA_URL }}images/favicon.png"/>
-		<link rel="stylesheet" href="{{ MEDIA_URL }}css/style.css" media="all" />
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-		<script>!window.jQuery && document.write('<script src="{{ MEDIA_URL }}js/jquery-1.4.2.min.js"><\/script>')</script>
-		<script src="{{ MEDIA_URL }}js/landing.js"></script>
-	</head>
-	<body>
-		<section class="c12">
-			<header class="g12">
-				<h1>hashfeedr<span>beta</span></h1>
-				<p>check ze tweets</p>
-			</header>
+{% extends "base.html" %}
+
+{% block body %}
 			<article class="g12">
 				<form action="/gofeed" method="GET" id="queryform" class="clearfix">
 					<input type="submit" id="gobutton" value="Go!"/>
@@ -41,9 +23,4 @@
 					{% endfor %}
 				</ul>
 			</article>
-			<footer class="g12">
-				<p><small>&copy; Copyright Hashfeedr 2010. Use HTML5 enabled browsers or die.</small></p>
-			</footer>
-		</section>
-	</body>
-</html>
+{% endblock %}

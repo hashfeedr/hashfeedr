@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>404 - file not found</title>
+		<link rel="shortcut icon" href="{{ MEDIA_URL }}images/favicon.png"/>
+		<link rel="stylesheet" href="{{ MEDIA_URL }}css/style.css" media="all" />
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+		<script>!window.jQuery && document.write('<script src="{{ MEDIA_URL }}js/jquery-1.4.2.min.js"><\/script>')</script>
+	</head>
+	<body>
+		<section class="c12">
+			<header class="g12">
+				<h1>hashfeedr<span>beta</span></h1>
+				<p>check ze tweets</p>
+			</header>
+			{% block body %}{% endblock %}
+			<footer class="g12">
+				<p><small>&copy; Copyright Hashfeedr 2010. Use HTML5 enabled browsers or die.</small></p>
+			</footer>
+		</section>
+	</body>
+</html>
