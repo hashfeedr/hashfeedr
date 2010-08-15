@@ -144,7 +144,6 @@ input, select {
 /* design */
 
 body {
-	background: #aaa;
 	background: #122d5c url('/media/images/background.png') no-repeat top center;
 }
 
@@ -170,6 +169,17 @@ section {
 
 a {
 	color: #9dd73f;
+	font-weight: bold;
+	text-decoration: none;
+	padding: 2px 5px;
+	background: rgba(0,0,0,0.4);
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	display: inline-block;
+}
+
+a:hover {
+	color: #fff;
 }
 
 header {
@@ -303,6 +313,7 @@ ul {
 
 li {
 	list-style-type:none;
+	margin: 4px 0;
 }
 h2.error {
 	font-size: 2.5em;
