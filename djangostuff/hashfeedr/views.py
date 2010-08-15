@@ -5,15 +5,17 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from urllib import quote
 import tweetpreloader
-from tophashfeeds import getMostPopularHashes
+from redisstats import RedisStats
 import settings
 import json
 import re
 
 def landing_page(request):
-	toptweets = map(lambda keyw: (keyw[0], quote(keyw[0]), keyw[1]), getMostPopularHashes(10)) 
-	
-	return render_to_response("landingpage.html", RequestContext(request, {'toptweets': toptweets}))
+	stats = RedisStats()
+	toptweets = map(lambda keyw: (keyw[0], quote(keyw[0]), keyw[1]), stats.getMostPopularHashes(10)) 
+	tps = stats.getTweetsPerSecond()
+	streams = stats.getStreamCnt()
+	return render_to_response("landingpage.html", RequestContext(request, {'toptweets': toptweets, 'streams': streams, 'tps': tps}))
 
 def feeder(request, query, ignoreme):
 	initials = tweetpreloader.getInitialTweets(query)
