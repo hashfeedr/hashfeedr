@@ -2,6 +2,7 @@ import TwistedTwitterStream
 from twisted.internet import reactor
 from twisted.python import log
 import os, json, urllib, re
+import photoservices
 
 class HashDispenser(TwistedTwitterStream.TweetReceiver):
     @classmethod
@@ -31,9 +32,22 @@ class HashDispenser(TwistedTwitterStream.TweetReceiver):
                 terms.append(word)
         return terms
 
+    def publishable(self,tweet):
+        composite = { 'tweet': tweet }
+        urls = re.findall(r"http://[^\s,]+",tweet['text'])
+        urls = [photoservices.getThumbFromURL(u) for u in urls]
+        urls = [u for u in urls if u is not False]
+
+        # only use the first picture, it's enough..
+        if len(urls) > 0:
+            composite['image'] = urls[0]
+
+        return json.dumps(composite)
+
     def tweetReceived(self,tweet):
-        terms = self.split(tweet["text"])
+        terms = self.split(tweet['text'])
+        p = self.publishable(tweet)
         for monitored in self.monitor.terms:
             if monitored in terms:
-                self.redis.publish('term:%s' % monitored,json.dumps(tweet))
+                self.redis.publish('term:%s' % monitored,p)
         pass
