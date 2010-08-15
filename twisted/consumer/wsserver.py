@@ -23,15 +23,16 @@ class HashfeedrWebSocket(websocket.WebSocketHandler):
 
         self.redis = None
         self.connected = True
+        self.system_event_trigger_id = reactor.addSystemEventTrigger('before','shutdown',self.onShutdown)
 
         self.createSubscriber()
         log.msg("%s: New connection (%s), term: %s" % (repr(self),request,self.term))
 
     def connectionLost(self,reason):
-        log.msg("%s: Connection lost" % repr(self))
-        self.connected = False
-        if (self.redis is not None):
-            self.destroyRedisClient()
+        # if we're no longer connected, no need to tear down as it has already been done
+        if self.connected:
+            log.msg(self, ": Connection lost (%s)" % reason)
+            self.teardown()
 
     @defer.inlineCallbacks
     def createSubscriber(self):
@@ -48,11 +49,27 @@ class HashfeedrWebSocket(websocket.WebSocketHandler):
 
         # client may already have disconnected before the redis client
         # was connected, so check if we need to destroy it now.
-        if (not self.connected):
-            self.destroyRedisClient()
+        if not self.connected:
+            self.teardown()
         else:
             # ping our registrar
             yield registrar.Registrar.addSocket(self)
+
+    def onShutdown(self):
+        # the trigger has fired here, so we can't remove it
+        self.system_event_trigger_id = None
+        return self.teardown()
+
+    def teardown(self):
+        if not self.connected:
+            return
+
+        log.msg(self, ": Tearing down...")
+        self.connected = False
+        if self.system_event_trigger_id is not None:
+            reactor.removeSystemEventTrigger(self.system_event_trigger_id)
+        if self.redis is not None:
+            return self.destroyRedisClient()
 
     @defer.inlineCallbacks
     def destroyRedisClient(self):
