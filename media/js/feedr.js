@@ -96,11 +96,9 @@ function Camera() {
 	this.position=new Property([0.0,0.0,0.0]); // x,y,angle
 	
 	this.activate=function() {
-		c.translate(width*0.5,height*0.5);
+		c.translate(width*0.5,height*0.5+128);
 		c.rotate(this.position.value[2]);
 		c.translate(-this.position.value[0],-this.position.value[1]);
-
-
 	}
 }
 var cam=new Camera();
