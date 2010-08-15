@@ -16,4 +16,4 @@ m = monitor.Monitor()
 
 # some sample tracking words
 track = ['obama']
-dispenser = hashdispenser.consume(os.environ['TWUSER'],os.environ['TWPASS'],redis,track)
+dispenser = hashdispenser.HashDispenser.consume(os.environ['TWUSER'],os.environ['TWPASS'],redis,track)
