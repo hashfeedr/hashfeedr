@@ -28,7 +28,7 @@ function lerp(t,a,b) {
 
 function placement(x) {
 	var t=x*0.006;
-	return (Math.sin(t)*2.0+Math.sin(2.232*t)+Math.sin(9.876*t)+Math.sin(18.888*t))*50.0;
+	return (Math.sin(t)*2.0+Math.sin(2.232*t)+Math.sin(9.876*t)*5.0+Math.sin(18.888*t))*50.0;
 }
 
 function calcangle() {
@@ -244,7 +244,9 @@ function update() {
 }
 
 function draw() {
-	c.drawImage(backdrop,0,0,width,height);
+//	if (backdrop.complete==true) {
+		c.drawImage(backdrop,0,0,width,height);
+//	}
 	c.save();
 	cam.activate();
 //	c.strokeStyle="#fff";
@@ -280,10 +282,11 @@ $(function(){
 		if (update()) draw();
 	},framedelay);
       
-	var ws = new WebSocket("ws://hashfeedr.com:8338/websession");
+	var ws = new WebSocket("ws://hashfeedr.com:8338/ws/bieberpenis");
 		ws.onmessage = function(e) {
 			var data=$.parseJSON(e.data);
-			var t=new Tweet(data.status.text,data.status.user.profile_image_url);
+			console.log(data);
+			var t=new Tweet(data.text,data.user.profile_image_url);
 			scene.push(t);
 			new Transition(cam.position,cam.position.value,[t.position.value[0]+t.width*0.5,t.position.value[1]+t.height*0.5,calcangle()],20.0);
 	}
