@@ -249,9 +249,9 @@ function update() {
 }
 
 function draw() {
-//	if (backdrop.complete==true) {
+	if (backdrop.complete==true) {
 		c.drawImage(backdrop,0,0,width,height);
-//	}
+	}
 	c.save();
 	cam.activate();
 //	c.strokeStyle="#fff";
@@ -298,9 +298,7 @@ $(function(){
 		ws.onmessage = function(e) {
 			var data=$.parseJSON(e.data);
 			console.log(data);
-//			var t=[new Tweet(data.text,data.user.profile_image_url)];
-//			tweets.push(t);
-			tweets[tweets.length]=([new Tweet(data.text,data.user.profile_image_url)]);
+			tweets[tweets.length]=([new Tweet(data.tweet.text,data.tweet.user.profile_image_url)]);
 			var t=tweets[tweets.length-1];
 			new Transition(cam.position,cam.position.value,[t[0].position.value[0]+t[0].width*0.5,t[0].position.value[1]+t[0].height*0.5,calcangle()],20.0);
 	}
