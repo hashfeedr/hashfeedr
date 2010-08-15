@@ -9,8 +9,9 @@ class TriggerSubscriber(RedisSubscriber):
         self.monitor.refresh()
 
 class Monitor(object):
-    def __init__(self):
+    def __init__(self,callback):
         self.terms = set()
+        self.callback = callback
         deferred = self.deferred_initialize()
         deferred.addCallback(self.refresh)
 
@@ -34,5 +35,13 @@ class Monitor(object):
     @defer.inlineCallbacks
     def refresh(self, *args):
         resp = yield self.redis.zrange('terms', '0', '-1', reverse=True)
-        self.terms = set(resp)
-        log.msg("Tracking words: %s" % repr(self.terms))
+        terms = set(resp)
+        if terms != self.terms:
+            self.terms = terms
+            log.msg("(updated) Tracking words: %s" % repr(self.terms))
+
+            # optionally trigger the callback function
+            if self.callback is not None:
+                self.callback(terms)
+        else:
+            log.msg("(same) Tracking words: %s" % repr(self.terms))

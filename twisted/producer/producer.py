@@ -5,15 +5,12 @@ import os, sys
 import redis as omg
 from producer import hashdispenser, monitor
 
-# connect to redis (synchronous for now)
-redis = omg.Redis()
-
 # twisted likes this
 application = service.Application("hashfeedr-producer")
 
-# start monitor
-m = monitor.Monitor()
+# connect to redis (synchronous for now)
+hashdispenser.HashDispenser.redis = omg.Redis()
 
-# some sample tracking words
-track = ['twitpic', 'yfrog', 'moby.to', 'tweetphoto']
-dispenser = hashdispenser.HashDispenser.consume(m,redis,track)
+# make the monitor call class function refresh on the dispenser
+# whenever the set of tracking words has changed
+m = monitor.Monitor(hashdispenser.HashDispenser.refresh)
