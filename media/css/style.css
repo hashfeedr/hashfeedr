@@ -154,13 +154,6 @@ body {
 	background: #122d5c;
 }
 
-img::selection {
-	background: transparent;
-}
-img::-moz-selection {
-	background: transparent;
-}
-
 section {
 	text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
 	color:#fff;
