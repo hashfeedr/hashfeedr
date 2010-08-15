@@ -16,4 +16,4 @@ m = monitor.Monitor()
 
 # some sample tracking words
 track = ['obama']
-dispenser = hashdispenser.HashDispenser.consume(monitor,redis,track)
+dispenser = hashdispenser.HashDispenser.consume(m,redis,track)
