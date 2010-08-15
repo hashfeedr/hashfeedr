@@ -138,12 +138,13 @@ function Transition(property,start,end,duration) {
 }
 
 /** @constructor */
-function Tweet(message,avatar) {
+function Tweet(message,avatar,username) {
 	this.position=new Property([100,10]);
 	this.charpos=new Property([0]);
 	this.margin=16;
 	this.padding=8;
 	this.message=message;
+	this.username=username;
 	
 	var l=this.message.split(" ");
 	var s="",n=0;
@@ -188,12 +189,17 @@ function Tweet(message,avatar) {
 			c.drawImage(this.avatar,this.margin+this.padding,this.margin+this.padding,64,64);
 		}
 
+		c.fillStyle="rgb(200,200,200)";
+		c.textAlign="right";
+		c.textBaseline="bottom";
+		c.fillText(this.username,this.width-this.margin-this.padding,this.height-this.margin);
+		c.textBaseline="top";
+		c.textAlign="left";
 		c.shadowColor="rgba(0,0,0,0.4)";
 		c.shadowOffsetX=2;
 		c.shadowOffsetY=2;
 		c.shadowBlur=4;
 		c.font=fontsize+"px "+fontface;
-		c.fillStyle="#ccc";
 		filltext(fontsize,this.message.substr(0,this.charpos.value[0]),this.margin+this.padding*2+64,this.margin+this.padding-4);
 		c.restore();
 	};
@@ -278,7 +284,7 @@ function draw() {
 function parsemessage(msg) {
 	var data=$.parseJSON(msg);
 	console.log(data);
-	tweets[tweets.length]=([new Tweet(data.tweet.text,data.tweet.user.profile_image_url)]);
+	tweets[tweets.length]=([new Tweet(data.tweet.text,data.tweet.user.profile_image_url,data.tweet.user.screen_name)]);
 	var t=tweets[tweets.length-1];
 	new Transition(cam.position,cam.position.value,[t[0].position.value[0]+t[0].width*0.5,t[0].position.value[1]+t[0].height*0.5,calcangle()],20.0);
 }

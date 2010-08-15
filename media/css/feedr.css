@@ -7,4 +7,5 @@ canvas {
 	height: 100%;
 	position: absolute;
 	z-index: 1;
+	-webkit-transform: translate3d(0,0,0); /* power up the engines */
 }
