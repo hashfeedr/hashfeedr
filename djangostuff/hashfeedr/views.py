@@ -15,7 +15,7 @@ def landing_page(request):
 
 def feeder(request, query, ignoreme):
 	initials = tweetpreloader.getInitialTweets(query)
-	return render_to_response("feedr.html", RequestContext(request, {'initialtweets': initials, 'keyword': query, 'websocket_url': settings.WEBSOCKET_URL + query}))
+	return render_to_response("feedr.html", RequestContext(request, {'initialtweets': initials, 'keyword': query, 'websocket_url': settings.WEBSOCKET_URL + quote(query)}))
 
 def gofeed(request):
 	return HttpResponseRedirect('/feed/' + quote(request.GET['query']))
