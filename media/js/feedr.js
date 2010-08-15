@@ -145,12 +145,14 @@ function PictureBox(src) {
 	this.loaded=false;
 	this.width=0;
 	this.height=0;
+	this.margin=16;
+	this.padding=8;
 
 	var self=this;
 	this.image.onload=function() {
 		self.loaded=true;
-		self.width=this.width;
-		self.height=this.height;
+		self.width=this.width+self.margin*2+self.padding*2;
+		self.height=this.height+self.margin*2+self.padding*2;
 		findnewpos(self);
 		tweets[tweets.length]=[self];
 	};
@@ -159,7 +161,11 @@ function PictureBox(src) {
 		if (self.loaded) {
 			c.save();
 			c.translate(this.position.value[0],this.position.value[1]);
-			c.drawImage(this.image,0,0);
+			c.fillStyle="rgba(0,0,0,1.0)";
+			c.fillRect(this.margin,this.margin,this.width-this.margin*2,this.height-this.margin*2);
+			c.strokeStyle="rgba(255,255,255,0.6)";
+			c.strokeRect(this.margin,this.margin,this.width-this.margin*2,this.height-this.margin*2);
+			c.drawImage(this.image,this.margin+this.padding,this.margin+this.padding);
 			c.restore();
 		}
 	};
