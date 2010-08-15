@@ -23,6 +23,6 @@
 					{% endfor %}
 				</ul>
 				<h2>Statistics</h2>
-				Currently processing {{ tpm|floatformat:0 }} tweets per minute, serving {{ streams|floatformat:0 }} concurrent sessions.
+				Currently processing {{ tpm|floatformat:0 }} tweet{{ tpm|pluralize }} per minute, serving {{ streams|floatformat:0 }} concurrent session{{ streams|pluralize }}.
 			</article>
 {% endblock %}
