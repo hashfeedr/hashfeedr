@@ -139,7 +139,7 @@ function Transition(property,start,end,duration) {
 }
 
 /** @constructor */
-function PictureBox(src,tweetpos) {
+function PictureBox(src,tweetpos,tweet) {
 	this.position=new Property([0,0]);
 	this.image=new Image();
 	this.image.src=src;
@@ -149,6 +149,7 @@ function PictureBox(src,tweetpos) {
 	this.margin=16;
 	this.padding=8;
 	this.tweetpos=tweetpos;
+	this.tweet=tweet;
 
 	var self=this;
 	this.image.onload=function() {
@@ -156,6 +157,7 @@ function PictureBox(src,tweetpos) {
 		self.width=this.width+self.margin*2+self.padding*2;
 		self.height=this.height+self.margin*2+self.padding*2;
 		findnewpos(self);
+		self.tweet.appear();
 		tweets[tweets.length]=[self];
 		scene[scene.length]=[new TweetLine([self.position.value[0]+self.width*0.5,self.position.value[1]+self.width*0.5],self.tweetpos)];
 	};
@@ -204,13 +206,15 @@ function Tweet(message,avatar,username) {
 	var exts=textmetrics(fontsize,this.message);
 	this.width=64+this.padding*3+exts[0]+2*this.margin;
 	this.height=Math.max(exts[1],64)+2*this.padding+2*this.margin+fontsize;
-	findnewpos(this);
 
 	this.avatar=new Image();
 	this.avatar.src=avatar.replace(/normal.jpg$/,"bigger.jpg");
 
-	new Transition(this.charpos,[0],[this.message.length],10);
-	
+	this.appear=function() {
+		findnewpos(this);
+		new Transition(this.charpos,[0],[this.message.length],10);
+	}
+
 	this.release=function() {
 		delete this.avatar;
 		delete this.position;
@@ -284,7 +288,7 @@ function GrowArrow(p0,p1,p2,p3) {
 function TweetLine(p0,p1) {
 	this.p0=new Property([p0[0],p0[1]]);
 	this.p1=new Property([p1[0],p1[1]]);
-	new Transition(this.p0,[p1[0],p1[1]],[p0[0],p0[1]],20);
+	new Transition(this.p0,[p1[0],p1[1]],[p0[0],p0[1]],10);
 
 	scene[scene.length]=[this];
 
@@ -359,7 +363,9 @@ function parsemessage(msg) {
 	var t=tweets[tweets.length-1];
 	new Transition(cam.position,cam.position.value,[t[0].position.value[0]+t[0].width*0.5,t[0].position.value[1]+t[0].height*0.5,calcangle()],20.0);
 	if ("image" in data) {
-		new PictureBox(data.image,[t[0].position.value[0]+t[0].width*0.5,t[0].position.value[1]+t[0].height*0.5]);
+		new PictureBox(data.image,[t[0].position.value[0]+t[0].width*0.5,t[0].position.value[1]+t[0].height*0.5],tweets[tweets.length-1]);
+	} else {
+		t[0].appear();
 	}
 }
 
