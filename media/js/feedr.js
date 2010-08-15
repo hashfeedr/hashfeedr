@@ -139,7 +139,7 @@ function Transition(property,start,end,duration) {
 }
 
 /** @constructor */
-function PictureBox(src) {
+function PictureBox(src,tweetpos) {
 	this.position=new Property([0,0]);
 	this.image=new Image();
 	this.image.src=src;
@@ -148,6 +148,7 @@ function PictureBox(src) {
 	this.height=0;
 	this.margin=16;
 	this.padding=8;
+	this.tweetpos=tweetpos;
 
 	var self=this;
 	this.image.onload=function() {
@@ -156,6 +157,7 @@ function PictureBox(src) {
 		self.height=this.height+self.margin*2+self.padding*2;
 		findnewpos(self);
 		tweets[tweets.length]=[self];
+		scene[scene.length]=[new TweetLine([self.position.value[0]+self.width*0.5,self.position.value[1]+self.width*0.5],self.tweetpos)];
 	};
 
 	this.release=function() {
@@ -203,7 +205,7 @@ function Tweet(message,avatar,username) {
 	this.width=64+this.padding*3+exts[0]+2*this.margin;
 	this.height=Math.max(exts[1],64)+2*this.padding+2*this.margin;
 	findnewpos(this);
-	tweets.push(this);
+//	tweets.push(this);
 
 	this.avatar=new Image();
 	this.avatar.src=avatar.replace(/normal.jpg$/,"bigger.jpg");
@@ -277,6 +279,28 @@ function GrowArrow(p0,p1,p2,p3) {
 	}
 }
 
+/** @constructor */
+function TweetLine(p0,p1) {
+	console.log(p0);
+	console.log(p1);
+	this.p0=new Property([p0[0],p0[1]]);
+	this.p1=new Property([p1[0],p1[1]]);
+	new Transition(this.p0,[p1[0],p1[1]],[p0[0],p0[1]],20);
+
+	scene[scene.length]=[this];
+
+	this.draw=function() {
+		c.strokeStyle="#ccc";
+		c.beginPath();
+		c.lineWidth=10;
+		c.moveTo(this.p0.value[0],this.p0.value[1]);
+		c.lineTo(this.p1.value[0],this.p1.value[1]);
+		c.stroke();
+	};
+}
+
+//scene[scene.length]=[new TweetLine([0,0],[200,200])];
+
 function resizecanvas() {
 	width=c.canvas.clientWidth;
 	height=c.canvas.clientHeight;
@@ -311,10 +335,10 @@ function draw() {
 //	for (var i=0;i<1000.0;i+=1) {
 //		c.lineTo(i,placement(i));
 //	}
-	c.stroke();
-	for (var e in scene) {
+//	c.stroke();
+	for (var e=0;e<scene.length;e++) {
 		c.save();
-		scene[e].draw();
+		scene[e][0].draw();
 		c.restore();
 	}
 	for (var e=0;e<tweets.length;e++) {
@@ -329,12 +353,11 @@ function draw() {
 
 function parsemessage(msg) {
 	var data=$.parseJSON(msg);
-	console.log(data);
 	tweets[tweets.length]=([new Tweet(data.tweet.text,data.tweet.user.profile_image_url,data.tweet.user.screen_name)]);
 	var t=tweets[tweets.length-1];
 	new Transition(cam.position,cam.position.value,[t[0].position.value[0]+t[0].width*0.5,t[0].position.value[1]+t[0].height*0.5,calcangle()],20.0);
 	if ("image" in data) {
-		new PictureBox(data.image);
+		new PictureBox(data.image,[t[0].position.value[0]+t[0].width*0.5,t[0].position.value[1]+t[0].height*0.5]);
 	}
 }
 
@@ -345,11 +368,11 @@ $(function(){
 	$(window).resize(resizecanvas);
 
 	$("#thecanvas").click(function(){
-		var t=new Tweet("RT justin bieber was a freaking lolcat abuser, he totally biebered them ololololol bla bla blah! 12345");
-		scene.push(t);
-		new Transition(cam.position,cam.position.value,[t.position.value[0]+t.width*0.5,t.position.value[1]+t.height*0.5,calcangle()],20.0);
+//		var t=new Tweet("RT justin bieber was a freaking lolcat abuser, he totally biebered them ololololol bla bla blah! 12345");
+//		scene.push(t);
+//		new Transition(cam.position,cam.position.value,[t.position.value[0]+t.width*0.5,t.position.value[1]+t.height*0.5,calcangle()],20.0);
 	});
-	scene.push(new GrowArrow([-100.0,10.0],[100.0,100.0],[400.0,400.0],[500.0,300.0]));
+//	scene[scene.length]=[new GrowArrow([-100.0,10.0],[100.0,100.0],[400.0,400.0],[500.0,300.0])];
 //	new Transition(tweet.position,[0,0],[50,70],10.0);
 //	new Transition(cam.position,[0.0,20.0,0.0],[200.0,0.0,1.0],100.0);
 
