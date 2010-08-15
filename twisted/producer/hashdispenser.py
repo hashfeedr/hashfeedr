@@ -120,6 +120,10 @@ class HashDispenser(TwistedTwitterStream.TweetReceiver):
             delattr(self,"onConnectionCallback")
 
     def tweetReceived(self,tweet):
+        if not 'text' in tweet:
+            log.msg(self,": weird payload: %s" % repr(tweet))
+            return
+
         self.__class__.tweetcounter.incr()
         terms = self.split(tweet['text'])
         matches = (self.term_set & terms)
