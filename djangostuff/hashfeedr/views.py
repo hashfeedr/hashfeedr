@@ -10,7 +10,7 @@ import settings
 import json
 
 def landing_page(request):
-	toptweets = map(lambda keyw: (keyw[0], quote(keyw[0]), keyw[1]), getMostPopularHashes(5)) 
+	toptweets = map(lambda keyw: (keyw[0], quote(keyw[0]), keyw[1]), getMostPopularHashes(10)) 
 	
 	return render_to_response("landingpage.html", RequestContext(request, {'toptweets': toptweets}))
 
