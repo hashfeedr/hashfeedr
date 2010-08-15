@@ -330,4 +330,6 @@ h2.error {
 }
 .regbg {
 	background-color: #122d5c;
+	border: 0;
+	padding: 0;
 }
