@@ -241,7 +241,7 @@ function Tweet(message,avatar,username) {
 		c.fillText(this.username,this.width-this.margin-this.padding,this.height-this.margin);
 		c.textBaseline="top";
 		c.textAlign="left";
-		c.shadowColor="rgba(0,0,0,0.4)";
+		c.shadowColor="rgba(0,0,0,0.0)";
 		c.shadowOffsetX=2;
 		c.shadowOffsetY=2;
 		c.shadowBlur=4;
