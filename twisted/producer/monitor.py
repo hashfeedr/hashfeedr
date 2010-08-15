@@ -34,9 +34,8 @@ class Monitor(object):
 
     @defer.inlineCallbacks
     def refresh(self, *args):
-        resp = yield self.redis.zrange('terms', '0', '-1', reverse=True)
-        terms = set(resp)
-        if terms != self.terms:
+        terms = yield self.redis.zrange('terms', '0', '-1', reverse=True)
+        if set(terms) != set(self.terms):
             self.terms = terms
             log.msg("(updated) Tracking words: %s" % repr(self.terms))
 

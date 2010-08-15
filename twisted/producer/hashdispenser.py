@@ -8,6 +8,31 @@ class HashDispenser(TwistedTwitterStream.TweetReceiver):
     instances = []
 
     @classmethod
+    def query_string(klass,terms):
+        qterms = set()
+        for term in terms:
+            qsterms = set()
+            for subterm in re.split(r"[,\s]\s*",term):
+                if len(subterm) > 2:
+                    qsterms.add(subterm)
+            if len(qterms) + len(qsterms) > 200:
+                break
+            else:
+                qterms |= qsterms
+        params = ["track=%s" % ",".join([urllib.quote(s) for s in qterms])]
+        return '&'.join(params)
+
+    @classmethod
+    def create_term_channel_map(klass,terms):
+        tdict = dict()
+        for term in terms:
+            for subterm in re.split(r"[,\s]\s*",term):
+                if subterm not in tdict:
+                    tdict[subterm] = set()
+                tdict[subterm].add(term)
+        return tdict
+
+    @classmethod
     def refresh(klass,terms):
         log.msg(klass, ": refresh stream")
         dispenser = klass(terms)
@@ -19,13 +44,22 @@ class HashDispenser(TwistedTwitterStream.TweetReceiver):
             dispenser.onConnectionCallback = klass.instances[-1].teardown
         klass.instances.append(dispenser)
 
+        # create query string (always less than 200 tracking words)
+        qs = klass.query_string(terms)
+
         # create a stream for the new dispenser
         usr, pwd = os.environ['TWUSER'], os.environ['TWPASS']
-        query = ["track=%s" % ",".join([urllib.quote(s) for s in terms])]
         factory = TwistedTwitterStream._TwitterStreamFactory(dispenser)
-        factory.make_header(usr, pwd, "POST", "/1/statuses/filter.json", "&".join(query))
+        factory.make_header(usr, pwd, "POST", "/1/statuses/filter.json", qs)
         dispenser.connector = reactor.connectTCP("stream.twitter.com", 80, factory)
         dispenser.factory = factory
+
+        dispenser.term_channel_map = klass.create_term_channel_map(terms)
+        dispenser.term_set = set(dispenser.term_channel_map.keys())
+
+        log.msg(klass,dispenser.term_channel_map)
+        log.msg(klass,dispenser.term_set)
+
         return dispenser
 
     def __init__(self,terms):
@@ -87,11 +121,22 @@ class HashDispenser(TwistedTwitterStream.TweetReceiver):
 
     def tweetReceived(self,tweet):
         terms = self.split(tweet['text'])
-        matches = (self.terms & terms)
+        matches = (self.term_set & terms)
+        seen_channels = set()
         if len(matches) > 0:
             p = self.publishable(tweet)
             for match in matches:
-                self.redis.publish('term:%s' % match, p)
+                for channel in self.term_channel_map[match]:
+                    # skip if we already published to this channel
+                    if channel in seen_channels:
+                        continue
+                    else:
+                        seen_channels.add(channel)
+
+                    # we need to make a direct call here, because txredis
+                    # doesn't implement the protocol properly
+                    self.redis._mb_cmd('PUBLISH','term:%s' % channel,p)
+                    self.redis.getResponse() # queue but discard response
         else:
             # can be uncommented to tweak splitting regex etc
             # log.msg("Unmatched terms:", terms)
