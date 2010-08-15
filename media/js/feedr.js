@@ -281,8 +281,6 @@ function GrowArrow(p0,p1,p2,p3) {
 
 /** @constructor */
 function TweetLine(p0,p1) {
-	console.log(p0);
-	console.log(p1);
 	this.p0=new Property([p0[0],p0[1]]);
 	this.p1=new Property([p1[0],p1[1]]);
 	new Transition(this.p0,[p1[0],p1[1]],[p0[0],p0[1]],20);
