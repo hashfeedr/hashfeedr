@@ -1,5 +1,5 @@
 function initFromSearchAPI(keyword) {
-	$.getJSON("http://search.twitter.com/search.json?callback=?", { 'q': keyword, 'rpp': 5}, function(data) {
+	$.getJSON("http://search.twitter.com/search.json?callback=?", { 'q': keyword.replace(/\s+/, " OR "), 'rpp': 5}, function(data) {
 		for(var j in data) {
 			var inv = data[j];
 				for(var i in inv) {
