@@ -22,14 +22,14 @@ class HashDispenser(TwistedTwitterStream.TweetReceiver):
 
     def split(self,text):
         sentences = re.split(r"\s*(\.+\s|,+)\s*", text.lower())
-        sentences = [re.split(r"(\s+|http://|\/|\.)",x) for x in sentences]
+        sentences = [re.split(r"\s*(\s+|http://|\/|\.|\#|\-|\')\s*",x) for x in sentences]
 
-        terms = []
+        terms = set()
         for words in sentences:
             for word in words:
                 if len(word) < 3:
                     continue
-                terms.append(word)
+                terms.add(word)
         return terms
 
     def publishable(self,tweet):
@@ -46,7 +46,10 @@ class HashDispenser(TwistedTwitterStream.TweetReceiver):
 
     def tweetReceived(self,tweet):
         terms = self.split(tweet['text'])
-        p = self.publishable(tweet)
-        for monitored in self.monitor.terms:
-            if monitored in terms:
-                self.redis.publish('term:%s' % monitored,p)
+        matches = (self.monitor.terms & terms)
+        if len(matches) > 0:
+            p = self.publishable(tweet)
+            for match in matches:
+                self.redis.publish('term:%s' % match, p)
+        else:
+            log.msg("Unmatched terms:", terms)
