@@ -18,7 +18,7 @@ def landing_page(request):
 def feeder(request, query, ignoreme):
 	initials = tweetpreloader.getInitialTweets(query)
 	js_safe_query = json.dumps(query).strip('""');
-	keywords = re.split(r"[,\s]\s*", query);
+	keywords = set(re.split(r"[,\s]\s*", query));
 	return render_to_response("feedr.html", RequestContext(request, {'initialtweets': initials, 'keyword': js_safe_query, 'keywords': keywords, 'websocket_url': settings.WEBSOCKET_URL + quote(query)}))
 
 def gofeed(request):
