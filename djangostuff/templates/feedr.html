@@ -17,11 +17,22 @@
 			WEB_SOCKET_DEBUG = true;
 		</script>
 		<script src="{{ MEDIA_URL}}js/feedr.js" type="text/javascript"></script>
+		<script src="{{ MEDIA_URL }}js/searchapi.js" type="text/javascript"></script>
 		<script>
+		var websocket_url = '{{ websocket_url }}';
+		
 		// contains some initial tweets to visualize if applicable
-		{% for tw in initialtweets %}
-		parsemessage({{ tw }});
-		{% endfor %}
+		{% if initialtweets.length > 0 %}
+			$(function() {
+				{% for tw in initialtweets %}
+				parsemessage({{ tw }});
+				{% endfor %}
+		    });
+		{% else %}
+			$(function() {
+				initFromSearchAPI('{{ keyword }}');
+			});
+		{% endif %}
 		</script>
 	</body>
 </html>

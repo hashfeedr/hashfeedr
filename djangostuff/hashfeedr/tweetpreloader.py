@@ -18,4 +18,3 @@ def getInitialTweets(keyword):
 	#TODO if list.length == 0 insert a message asking people to tweet more :P
 	
 	return tweetlist
-
