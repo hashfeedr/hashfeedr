@@ -9,7 +9,7 @@ import tweetpreloader
 def landing_page(request):
 		return render_to_response("landingpage.html", RequestContext(request))
 
-def feeder(request, query):
+def feeder(request, query, ignoreme):
 	initials = tweetpreloader.getInitialTweets(query)
 	return render_to_response("feedr.html", RequestContext(request, {'initialtweets': initials}))
 

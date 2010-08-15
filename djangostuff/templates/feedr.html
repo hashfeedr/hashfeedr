@@ -17,5 +17,11 @@
 			WEB_SOCKET_DEBUG = true;
 		</script>
 		<script src="{{ MEDIA_URL}}js/feedr.js" type="text/javascript"></script>
+		<script>
+		// contains some initial tweets to visualize if applicable
+		{% for tw in initialtweets %}
+		parsemessage({{ tw }});
+		{% endfor %}
+		</script>
 	</body>
 </html>

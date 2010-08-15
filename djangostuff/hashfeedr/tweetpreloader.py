@@ -8,7 +8,7 @@ def getInitialTweets(keyword):
 	returns empty string if we dont have anything in Redis"""
 	
 	# get first 5 tweets from the list, they are already jsonified in Redis :)
-	tweetlist = redisclient.lrange("ctweets-"+keyword.lower(), 0, 5)
+	tweetlist = redisclient.lrange("itweets-"+keyword.lower(), 0, 5)
 	
 	#TODO if list.length == 0 insert a message asking people to tweet more :P
 	
