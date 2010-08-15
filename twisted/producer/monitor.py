@@ -44,3 +44,20 @@ class Monitor(object):
                 self.callback(terms)
         else:
             log.msg("(same) Tracking words: %s" % repr(self.terms))
+
+class TweetCounter(object):
+    def __init__(self,redis):
+        self.count = 0
+        self.redis = redis
+        self.task = task.LoopingCall(self.post)
+        self.task.start(60)
+
+    def incr(self):
+        self.count += 1
+        pass
+
+    @defer.inlineCallbacks
+    def post(self):
+        cnt = self.count
+        self.count = 0
+        yield self.redis.set('stats:tpm',cnt)

@@ -120,11 +120,12 @@ class HashDispenser(TwistedTwitterStream.TweetReceiver):
             delattr(self,"onConnectionCallback")
 
     def tweetReceived(self,tweet):
+        self.__class__.tweetcounter.incr()
         terms = self.split(tweet['text'])
         matches = (self.term_set & terms)
-        seen_channels = set()
         if len(matches) > 0:
             p = self.publishable(tweet)
+            seen_channels = set()
             for match in matches:
                 for channel in self.term_channel_map[match]:
                     # skip if we already published to this channel
