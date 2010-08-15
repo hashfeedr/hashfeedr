@@ -7,12 +7,19 @@
 	</head>
 	<body>
 		<header>
-			<aside>
+			<aside class="logo">
 				<a href="/"><h1>hashfeedr<span>beta</span></h1></a>
-			<aside>
-			<aside>
-				tag1
 			</aside>
+			{% for kw in keywords %}
+				<aside class="keyword">
+					{{ kw }}
+				</aside>
+				{% if not forloop.last %}
+					<aside class="or">
+						or
+					</aside>
+				{% endif %}
+			{% endfor %}
 		</header>
 		<canvas id="thecanvas" width="1" height="1"></canvas>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
