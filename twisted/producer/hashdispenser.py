@@ -22,7 +22,7 @@ class HashDispenser(TwistedTwitterStream.TweetReceiver):
 
     def split(self,text):
         sentences = re.split(r"\s*(\.+\s|,+)\s*", text.lower())
-        sentences = [re.split(r"\s+",x) for x in sentences]
+        sentences = [re.split(r"(\s+|http://|\/|\.)",x) for x in sentences]
 
         terms = []
         for words in sentences:
