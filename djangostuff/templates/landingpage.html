@@ -16,7 +16,11 @@
 		</form>
 		</p>
 		<h2>Popular active hashfeeds</h2>
-		<ul><li><a href="/feed/justin">Justin</a></li><li><a href="/feed/biebergasm">Bieber</a></li></ul>
+		<ul>
+		{% for keyword in toptweets %}
+		<li><a href="/feed/{{ keyword.1 }}">{{ keyword.0 }}</a></li>
+		{% endfor %}
+		</ul>
 		<h2>About HashFeedr</h2>
 		<p>There is no time for this.</p>
 		

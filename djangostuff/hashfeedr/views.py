@@ -5,9 +5,12 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from urllib import quote
 import tweetpreloader
+from tophashfeeds import getMostPopularHashes
 
 def landing_page(request):
-		return render_to_response("landingpage.html", RequestContext(request))
+	toptweets = map(lambda keyw: (keyw, quote(keyw)), getMostPopularHashes(5)) 
+	
+	return render_to_response("landingpage.html", RequestContext(request, {'toptweets': toptweets}))
 
 def feeder(request, query, ignoreme):
 	initials = tweetpreloader.getInitialTweets(query)
