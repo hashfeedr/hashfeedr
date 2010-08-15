@@ -1,4 +1,6 @@
-from twisted.internet import reactor
+from twisted.internet import reactor, task, protocol, defer
+from twisted.application import service
+from twisted.python import log
 import os, sys
 import redis as omg
 from producer import hashdispenser
@@ -6,8 +8,9 @@ from producer import hashdispenser
 # connect to redis (synchronous for now)
 redis = omg.Redis()
 
-# some sample tracking words
-track = ['twexit','durftevragen']
-dispenser = hashdispenser.consume(os.environ['TWUSER'],os.environ['TWPASS'],redis,track)
+# twisted likes this
+application = service.Application("hashfeedr-producer")
 
-reactor.run()
+# some sample tracking words
+track = ['obama']
+dispenser = hashdispenser.consume(os.environ['TWUSER'],os.environ['TWPASS'],redis,track)
