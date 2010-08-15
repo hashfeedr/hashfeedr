@@ -1,9 +1,9 @@
 var width,height,c;
 
 var framedelay=60;
-var fontsize=30;
+var fontsize=26;
 var linelength=20;
-var fontface="Georgia";
+var fontface="DroidSansRegular";
 
 var scene=[];
 var transitions=[];
@@ -14,8 +14,8 @@ var placementx=100.0;
 var campos=[0,0];
 var camrot=0.0;
 
-var backdrop=new Image();
-backdrop.src="/media/images/feedbackdrop.jpg";
+//var backdrop=new Image();
+//backdrop.src="/media/images/feedbackdrop.jpg";
 
 function catmullrom(t,x0,x1,x2,x3){
 	var t2=t*t,t3=t2*t;
@@ -33,7 +33,7 @@ function placement(x) {
 
 function calcangle() {
 	var dy=placement(placementx+1.0)-placement(placementx);
-	return Math.max(Math.min(Math.tan(dy)*0.1,0.2),-0.2);
+	return Math.max(Math.min(Math.tan(dy)*0.1,0.1),-0.1);
 }
 
 function boxintersect(x1,y1,w1,h1,x2,y2,w2,h2) {
@@ -203,9 +203,8 @@ function Tweet(message,avatar,username) {
 	c.font=fontsize+"px "+fontface;
 	var exts=textmetrics(fontsize,this.message);
 	this.width=64+this.padding*3+exts[0]+2*this.margin;
-	this.height=Math.max(exts[1],64)+2*this.padding+2*this.margin;
+	this.height=Math.max(exts[1],64)+2*this.padding+2*this.margin+fontsize;
 	findnewpos(this);
-//	tweets.push(this);
 
 	this.avatar=new Image();
 	this.avatar.src=avatar.replace(/normal.jpg$/,"bigger.jpg");
@@ -227,9 +226,9 @@ function Tweet(message,avatar,username) {
 		c.save();
 		c.translate(this.position.value[0],this.position.value[1]);
 		
-		c.fillStyle="rgba(0,0,0,1.0)";
+		c.fillStyle="#040a14";
 		c.fillRect(this.margin,this.margin,this.width-this.margin*2,this.height-this.margin*2);
-		c.strokeStyle="rgba(255,255,255,0.6)";
+		c.strokeStyle="rgba(255,255,255,0.8)";
 		c.strokeRect(this.margin,this.margin,this.width-this.margin*2,this.height-this.margin*2);
 		
 		if (this.avatar.complete==true) {
@@ -237,10 +236,12 @@ function Tweet(message,avatar,username) {
 			c.drawImage(this.avatar,this.margin+this.padding,this.margin+this.padding,64,64);
 		}
 
-		c.fillStyle="rgb(200,200,200)";
+		c.fillStyle="#79a631";
 		c.textAlign="right";
 		c.textBaseline="bottom";
-		c.fillText(this.username,this.width-this.margin-this.padding,this.height-this.margin);
+		c.font=fontsize+"px DroidSansBold";
+		c.fillText(this.username,this.width-this.margin-this.padding*2,this.height-this.margin-this.padding);
+		c.fillStyle="#fff";
 		c.textBaseline="top";
 		c.textAlign="left";
 		c.shadowColor="rgba(0,0,0,0.0)";
@@ -323,10 +324,13 @@ function update() {
 }
 
 function draw() {
-	if (backdrop.complete==true) {
-		c.drawImage(backdrop,0,0,width,height);
-	}
+//	if (backdrop.complete==true) {
+//		c.drawImage(backdrop,0,0,width,height);
+//	}
+	c.fillStyle="#0b1d3a";
+	c.fillRect(0,0,width,height);
 	c.save();
+	c.scale(0.8,0.8);
 	cam.activate();
 //	c.strokeStyle="#fff";
 //	c.beginPath();
