@@ -1,7 +1,7 @@
 # Hashfeedr
 
 Django/Twisted app that streams tweets in real-time. Created in the light of
-the Django Dash 2010 by @thedjinn, @michh37 and @pnoordhuis.
+the Django Dash 2010 by @thedjinn, @michielheijkoop and @pnoordhuis.
 
 ## Setting up
 
