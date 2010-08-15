@@ -29,3 +29,7 @@ class Registrar(object):
     @defer.inlineCallbacks
     def removeSocket(klass,websocket):
         yield klass.redis.zincr('terms', websocket.term, -1)
+
+        # ugly: calling redis api straight from here, but easy for now
+        klass.redis._mb_cmd('ZREMRANGEBYSCORE', 'terms', '-inf', '0')
+        yield klass.redis.getResponse()

@@ -77,6 +77,11 @@ def start_listening(status,site):
     reactor.listenTCP(port,site)
     log.msg("Now listening on port %d" % port)
 
+def show_exception(err):
+    log.msg(repr(err))
+
 # first establish a connection to the registrar
 deferred = registrar.Registrar.connect('localhost',6379)
 deferred.addCallback(start_listening,site)
+deferred.addErrback(show_exception)
+
