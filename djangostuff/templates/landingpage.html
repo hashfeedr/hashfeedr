@@ -36,7 +36,7 @@
 				<h2>Popular active hashfeeds</h2>
 				<ul>
 					{% for keyword in toptweets %}
-						<li><a href="/feed/{{ keyword.1 }}">{{ keyword.0 }}</a></li>
+						<li><a href="/feed/{{ keyword.1 }}">{{ keyword.0 }} ({{ keyword.2|floatformat:0 }})</a></li>
 					{% endfor %}
 				</ul>
 			</article>
