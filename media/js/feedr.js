@@ -380,7 +380,7 @@ $(function(){
 		if (update()) draw();
 	},framedelay);
       
-	var ws = new WebSocket("ws://hashfeedr.com:8338/ws/yfrog");
+	var ws = new WebSocket(websocket_url);
 	ws.onmessage = function(e) {
 		parsemessage(e.data);
 	};
