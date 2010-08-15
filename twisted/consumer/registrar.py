@@ -24,6 +24,7 @@ class Registrar(object):
     @defer.inlineCallbacks
     def addSocket(klass,websocket):
         yield klass.redis.zincr('terms', websocket.term, 1)
+        yield klass.notifyProducer()
 
     @classmethod
     @defer.inlineCallbacks
@@ -33,3 +34,10 @@ class Registrar(object):
         # ugly: calling redis api straight from here, but easy for now
         klass.redis._mb_cmd('ZREMRANGEBYSCORE', 'terms', '-inf', '0')
         yield klass.redis.getResponse()
+        yield klass.notifyProducer()
+
+    @classmethod
+    @defer.inlineCallbacks
+    def notifyProducer(klass):
+        # notify producer of updated tracking terms
+        yield klass.redis.publish('producer:trigger', '1')
