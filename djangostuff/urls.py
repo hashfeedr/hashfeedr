@@ -20,9 +20,6 @@ urlpatterns = patterns('',
 	(r'^$', 'hashfeedr.views.landing_page'),
 	(r'^feed/((\w|\d|#|\s|\.)+)$', 'hashfeedr.views.feeder'),
 	(r'^gofeed$','hashfeedr.views.gofeed'),
+	(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': os.path.join(os.path.dirname(__file__),'..','media')}),
 )
 
-if settings.DEBUG:
-    urlpatterns += patterns('',
-        (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': os.path.join(os.path.dirname(__file__),'..','media')}),
-    )
