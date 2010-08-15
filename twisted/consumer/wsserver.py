@@ -42,7 +42,7 @@ class HashfeedrWebSocket(websocket.WebSocketHandler):
         # make the redis subscriber aware of the websocket before it
         # subscribes to the channel
         _redis.websocket = self
-        yield _redis.subscribe("term:%s" % self.term)
+        yield _redis._mb_cmd('SUBSCRIBE','term:%s' % self.term)
 
         # only set redis when we're completely done
         self.redis = _redis
