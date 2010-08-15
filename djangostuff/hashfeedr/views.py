@@ -13,9 +13,9 @@ import re
 def landing_page(request):
 	stats = RedisStats()
 	toptweets = map(lambda keyw: (keyw[0], quote(keyw[0]), keyw[1]), stats.getMostPopularHashes(10)) 
-	tps = stats.getTweetsPerSecond()
+	tpm = stats.getTweetsPerMinute()
 	streams = stats.getStreamCnt()
-	return render_to_response("landingpage.html", RequestContext(request, {'toptweets': toptweets, 'streams': streams, 'tps': tps}))
+	return render_to_response("landingpage.html", RequestContext(request, {'toptweets': toptweets, 'streams': streams, 'tpm': tpm}))
 
 def feeder(request, query, ignoreme):
 	initials = tweetpreloader.getInitialTweets(query)

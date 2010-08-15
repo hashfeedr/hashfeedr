@@ -12,9 +12,9 @@ class RedisStats:
 			print "Plz start redis :("
 			return []
 
-	def getTweetsPerSecond(self):
+	def getTweetsPerMinute(self):
 		try:
-			return self.r.get("stats:tps")
+			return self.r.get("stats:tpm")
 		except redis.ConnectionError:
 			print "Redis not running :("
 			return 0.0
