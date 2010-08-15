@@ -1,6 +1,6 @@
 var width,height,c;
 
-var framedelay=66;
+var framedelay=60;
 var fontsize=30;
 var linelength=20;
 var fontface="Georgia";
@@ -46,6 +46,7 @@ function boxintersect(x1,y1,w1,h1,x2,y2,w2,h2) {
 function eradicate() {
 	for (var i=0;i<tweets.length;++i) {
 		if (tweets[i][0].position.value[0]<placementx-2000) {
+			tweets[i][0].release();
 			delete tweets[i][0];
 			tweets.splice(i--,1);
 		}
@@ -157,6 +158,11 @@ function PictureBox(src) {
 		tweets[tweets.length]=[self];
 	};
 
+	this.release=function() {
+		delete this.image;
+		delete this.position;
+	};
+
 	this.draw=function() {
 		if (self.loaded) {
 			c.save();
@@ -170,8 +176,6 @@ function PictureBox(src) {
 		}
 	};
 }
-
-new PictureBox("https://s3.amazonaws.com/twitter_production/profile_images/57432055/My_Fabulous_MicroMoog-1_bigger.jpg");
 
 /** @constructor */
 function Tweet(message,avatar,username) {
@@ -206,8 +210,14 @@ function Tweet(message,avatar,username) {
 
 	new Transition(this.charpos,[0],[this.message.length],10);
 	
+	this.release=function() {
+		delete this.avatar;
+		delete this.position;
+		delete this.charpos;
+	};
+	
 	this.draw=function() {
-		c.shadowColor="rgba(0,0,0,0.4)";
+		c.shadowColor="rgba(0,0,0,0.0)";
 		c.shadowOffsetX=0;
 		c.shadowOffsetY=0;
 		c.shadowBlur=16;
