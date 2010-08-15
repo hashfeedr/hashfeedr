@@ -233,7 +233,11 @@ function Tweet(message,avatar,username) {
 		
 		if (this.avatar.complete==true) {
 			c.shadowBlur=0;
-			c.drawImage(this.avatar,this.margin+this.padding,this.margin+this.padding,64,64);
+			try {
+				c.drawImage(this.avatar,this.margin+this.padding,this.margin+this.padding,64,64);
+			} catch(err) {
+				// fail silently :)
+			}
 		}
 
 		c.fillStyle="#79a631";
