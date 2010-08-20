@@ -171,8 +171,14 @@ article a {
 	display: inline-block;
 }
 
-article a:hover {
+article a:hover, footer a:hover {
 	color: #fff;
+}
+
+footer a {
+	color: #9dd73f;
+	font-weight: bold;
+	text-decoration: none;
 }
 
 header {
@@ -329,3 +335,5 @@ li {
 h2.error {
 	font-size: 2.5em;
 }
+
+
