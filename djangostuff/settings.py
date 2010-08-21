@@ -1,8 +1,12 @@
 # Django settings for djangostuff project.
 
 import os
+from socket import gethostname;
 
-DEBUG = True
+if gethostname()=="noordhuis.xslhosting.com":
+	DEBUG = False
+else:
+	DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
