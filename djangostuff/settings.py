@@ -3,7 +3,7 @@
 import os
 from socket import gethostname;
 
-if gethostname()=="noordhuis.xslhosting.com":
+if gethostname()=="noordhuis.xlshosting.com":
 	DEBUG = False
 else:
 	DEBUG = True
