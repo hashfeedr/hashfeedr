@@ -11,6 +11,7 @@ html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address
 
 body {
     line-height:1;
+	background: #122d5c url('/media/images/background.png') no-repeat top center;
 }
 
 :focus {
@@ -135,12 +136,50 @@ a {
 	text-decoration: none;
 }
 
-canvas {
-	width: 100%;
-	height: 100%;
+#viewport {
 	position: absolute;
 	z-index: 1;
+	width: 100%;
+	height: 100%;
+	color:#fff;
 	-webkit-transform: translate3d(0,0,0); /* power up the engines */
+}
+
+#scene {
+	width:100%;
+	height:100%;
+	-webkit-transition: all 500ms ease;
+}
+	
+.tweet {
+	position: absolute;
+	display: inline-block;
+	background: #040a14;
+
+	border: 1px solid #888;
+	padding: 8px;
+	visibility: hidden;
+}
+
+.tweet img {
+	float: left;
+	width: 73px;
+	height: 73px;
+}
+
+.tweet p {
+	margin-left: 81px;
+	font: 18px DroidSansRegular, Arial, Helvetica Neue, sans-serif;
+}
+
+.tweet p.username {
+	color: #9dd73f;
+	text-align: right;
+	font: 18px DroidSansBold, Arial, Helvetica Neue, sans-serif;
+}
+
+.tweet:hover {
+	background: #555;
 }
 
 aside {
