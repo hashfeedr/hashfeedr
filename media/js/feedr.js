@@ -31,13 +31,22 @@ function lerp(t,a,b) {
 function placement(x) {
 //	var t=x*0.006;
 //	return (Math.sin(t)*2.0+Math.sin(2.232*t)+Math.sin(9.876*t)*5.0+Math.sin(18.888*t))*50.0;
+//	var t=x*0.002;
+//	return (Math.sin(t)*2.0+Math.sin(2.232*t)+Math.sin(9.876*t)*5.0+Math.sin(18.888*t))*40.0;
 	var t=x*0.002;
-	return (Math.sin(t)*2.0+Math.sin(2.232*t)+Math.sin(9.876*t)*5.0+Math.sin(18.888*t))*40.0;
+	return (Math.sin(t*0.8)*8.0+Math.sin(2.232*t)+Math.sin(9.876*t)*5.0+Math.sin(18.888*t))*40.0;
+}
+
+// simplified placement for camera angle derivative
+function placement2(x) {
+	var t=x*0.002;
+	return (Math.sin(t*0.8)*2.0)*40.0;
 }
 
 function calcangle() {
-	var dy=placement(placementx+1.0)-placement(placementx);
-	return Math.max(Math.min(Math.tan(dy)*0.1,0.1/aspect),-0.1/aspect);
+	var dy=placement2(placementx+1.0)-placement2(placementx);
+//	return Math.max(Math.min(Math.tan(dy)*0.1,0.1/aspect),-0.1/aspect);
+	return Math.atan(dy);
 }
 
 function boxintersect(x1,y1,w1,h1,x2,y2,w2,h2) {
@@ -106,7 +115,7 @@ function Camera() {
 	// TODO: uniform scaling
 
 	this.activate = function() {
-		scene.css("-webkit-transform","rotate("+this.angle+"deg) translate3d("+((width*0.5)-this.x)+"px,"+((height*0.5)-this.y)+"px,0)");
+		scene.css("-webkit-transform","rotate("+this.angle+"rad) translate3d("+((width*0.5)-this.x)+"px,"+((height*0.5)-this.y)+"px,0)");
 	};
 
 	this.move = function(x,y,angle) {
@@ -150,7 +159,8 @@ function addobj(cls, html) {
 	var pos=findnewpos(w+16,h+16);
 	t.css({"-webkit-transform":"translate("+pos[0]+"px,"+pos[1]+"px)","-webkit-transitxion":"all .8s ease-out"});
 	t.css({"visibility":"visible"});
-	cam.move(pos[0]+w*0.5,pos[1]+h*0.5,Math.random()*20.0-10.0);
+//	cam.move(pos[0]+w*0.5,pos[1]+h*0.5,Math.random()*20.0-10.0);
+	cam.move(pos[0]+w*0.5-200,pos[1]+h*0.5,calcangle());
 	cam.activate();
 	tweets.push({x:pos[0],y:pos[1],width:w+16,height:h+16,id:"#obj"+count});
 	//t.css({"-webkit-transform":"rotate(30deg)"});
