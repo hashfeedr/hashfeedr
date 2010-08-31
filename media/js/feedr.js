@@ -44,6 +44,7 @@ function placement2(x) {
 }
 
 function calcangle() {
+	// TODO: when the placement function becomes final, replace placement2 and dy with a real derivative
 	var dy=placement2(placementx+1.0)-placement2(placementx);
 //	return Math.max(Math.min(Math.tan(dy)*0.1,0.1/aspect),-0.1/aspect);
 	return Math.atan(dy);
@@ -68,25 +69,6 @@ function breaktext(str, linelength) {
 		}
 	}
 	return s;
-}
-
-function findnewpos_old(tw) {
-	var found=false,x=0,y=0;
-	var w=tw.width;
-	var h=tw.height;
-	while (!found) {
-		found=true;
-		placementx+=1.0;
-		x=placementx-tw.width*0.5;
-		y=placement(placementx)-tw.height*0.5;
-		for (var i=0;i<tweets.length;++i) {
-			if (boxintersect(x,y,w,h,tweets[i][0].position.value[0],tweets[i][0].position.value[1],tweets[i][0].width,tweets[i][0].height)) {
-				found=false;
-				break;
-			}
-		}
-	}
-	tw.position.value=[x,y];
 }
 
 function findnewpos(w,h) {
@@ -142,9 +124,6 @@ function resizescene() {
 }
 
 function addtweet(txt,image,screenname) {
-//	var txt="'Tulp' het hoogtepunt van mijn #nzon10? Kris en Lex Vesseur hebben het voor de neus van Mads weten weg te pikken. Een 9. #Formatgava.";
-//	txt=txt.slice(0,Math.random()*txt.length);
-
 	txt=breaktext(txt,25);
 	image=image.replace(/normal(\.\w{3})$/,"bigger$1");
 	addobj("tweet","<img src=\""+image+"\"/><p>"+txt+"</p><p class=\"username\">"+screenname+"</p>");
@@ -157,9 +136,8 @@ function addobj(cls, html) {
 	var w=t.outerWidth(); // This also forces a reflow of the layout, applying the initial css so that the transition occurs
 	var h=t.outerHeight();
 	var pos=findnewpos(w+16,h+16);
-	t.css({"-webkit-transform":"translate("+pos[0]+"px,"+pos[1]+"px)","-webkit-transitxion":"all .8s ease-out"});
+	t.css({"-webkit-transform":"translate("+pos[0]+"px,"+pos[1]+"px)"/*,"-webkit-transitxion":"all .8s ease-out"*/});
 	t.css({"visibility":"visible"});
-//	cam.move(pos[0]+w*0.5,pos[1]+h*0.5,Math.random()*20.0-10.0);
 	cam.move(pos[0]+w*0.5-200,pos[1]+h*0.5,calcangle());
 	cam.activate();
 	tweets.push({x:pos[0],y:pos[1],width:w+16,height:h+16,id:"#obj"+count});
@@ -199,26 +177,25 @@ $(function(){
 	$(window).resize(resizescene);
 	scene.css("-webkit-transform","translate3d("+(width*0.5)+"px,"+(height*0.5)+"px,0)");
 
-	vp.click(function(){
-		addtweet();
+//	vp.click(function(){
+//		addtweet();
 		//cam.move(200,200,Math.random()*40.0-20.0);
 //		cam.move(200,200,0);
 //		cam.activate();
 //		var t=new Tweet("RT justin bieber was a freaking lolcat abuser, he totally biebered them ololololol bla bla blah! 12345");
 //		scene.push(t);
 //		new Transition(cam.position,cam.position.value,[t.position.value[0]+t.width*0.5,t.position.value[1]+t.height*0.5,calcangle()],20.0);
-	});
+//	});
 //	scene[scene.length]=[new GrowArrow([-100.0,10.0],[100.0,100.0],[400.0,400.0],[500.0,300.0])];
 //	new Transition(tweet.position,[0,0],[50,70],10.0);
 //	new Transition(cam.position,[0.0,20.0,0.0],[200.0,0.0,1.0],100.0);
 
-	setInterval(function(){
+//	setInterval(function(){
 //		if (update()) draw();
-	},framedelay);
+//	},framedelay);
       
 	var ws = new WebSocket(websocket_url);
 	ws.onmessage = function(e) {
 		parsemessage(e.data);
 	};
 });
-
